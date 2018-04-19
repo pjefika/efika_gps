@@ -3,10 +3,27 @@
 <META http-equiv=Content-Type content="text/html; charset=utf-8">
 <link rel="stylesheet" href="../../pages/wificonf/css/wificonf.css" type="text/css">
 <script src="../../js/jquery-1.10.2.min.js"></script>
-<script src="../../pages/wificonf/js/wificonf.js"></script>
+<script src="../../pages/wificonf/js/wifichannel.js"></script>
 <div class="body-form">
     <div id="form">
-
+        <label>Escolha um Canal</label>
+        <br>
+        <select id="channel">
+            <option value="" selected disabled>Selecione</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+        </select>
+        <br>
+        <button type="button" id="setchannel">Trocar Canal</button>
     </div>
     <!-- Loading do comando -->
     <div id="loading">

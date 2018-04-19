@@ -1,32 +1,31 @@
 $(document).ready(function () {
+
     // Variaveis do sistema
     var instancia;
     var _data;
 
-    var user_pass;
+    var channel;
 
     getInstancia();
 
     $("#setchannel").click(function () {
-        setMensagensOptions("none", null);
         getSelectedValue();
-        console.log(user_pass);
-        if (user_pass.ssid == "" && user_pass.password == "" || user_pass.ssid == "") {
+        if (channel === undefined || channel == "") {
             setMensagensOptions("block", "Por favor preencha os campos.");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Configuração realizada com sucesso."); // Success msg
+                setMensagensOptions("block", "Troca para o canal " + channel + " realizada com sucesso"); // Success msg
             }, 1000);
         }
     });
 
     /**
-     * Importar para todos os scripts e Manter o padrão \/
-     * 
-     */
+    * Importar para todos os scripts e Manter o padrão \/
+    * 
+    */
     function getInstancia() {
         if (window.location.href) {
             var link = window.location.href;
@@ -68,9 +67,6 @@ $(document).ready(function () {
     }
 
     function getSelectedValue() {
-        user_pass = {
-            ssid: $("#input_ssid").val(),
-            password: $("#input_password").val()
-        }
+        channel = $("#channel").val();
     }
 });
