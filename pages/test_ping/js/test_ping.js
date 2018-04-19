@@ -17,6 +17,7 @@ $(document).ready(function () {
         } else {
             setLoadingOptions("block", "Aguarde...");
             setFormOption("none");
+            setMensagensOptions("none", null);
             setTimeout(function () {
 
                 setTableResultOptions("block");
