@@ -13,7 +13,6 @@ $(document).ready(function () {
     $("#assoc_id").click(function () {
         setMensagensOptions("none", null);
         getSelectedValue();
-        console.log(selected);
         if (selected === undefined || selected == null) {
             setMensagensOptions("block", "Por favor selecione um serial");
         } else {
