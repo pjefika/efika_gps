@@ -1,0 +1,17 @@
+.body-form{
+    width: 50%;
+
+    /* margin: auto;    
+    padding: 10px;
+    text-align: center;
+    border: 3px solid green; */
+}
+
+table {
+    text-align: center;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}

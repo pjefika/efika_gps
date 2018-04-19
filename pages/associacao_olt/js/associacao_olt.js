@@ -1,10 +1,14 @@
 $(document).ready(function () {
-    // http://10.40.195.81/fabio/efika_gps/html/associacao_olt/associacao_olt.html?instancia=2835181121
+    // http://10.40.195.81/fabio/efika_gps/pages/associacao_olt/associacao_olt.html?instancia=2835181121
+
+    // Variaveis do sistema
     var instancia;
-    var listaSerial;
-    var selected;
     var _data;
 
+    var listaSerial;
+    var selected;
+
+    // Chamada inicial
     getInstancia();
 
     /**
