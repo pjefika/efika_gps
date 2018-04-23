@@ -1,6 +1,5 @@
 $(document).ready(function () {
     // http://10.40.195.81/fabio/efika_gps/pages/associacao_olt/associacao_olt.html?instancia=2835181121
-
     // Variaveis do sistema
     var instancia;
     var _data;
@@ -40,6 +39,7 @@ $(document).ready(function () {
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
                 setMensagensOptions("none", null);
+                document.getElementById("instancia").innerHTML = instancia;
                 /**
                 * Monta o obj de acordo com o caso de uso... 
                 */
@@ -69,7 +69,7 @@ $(document).ready(function () {
             request.open(type, url);
             request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         }
-        // doRequest();        
+        // doRequest();
         mockedalist();
     }
 
@@ -79,14 +79,19 @@ $(document).ready(function () {
             if (request.readyState === 4) {
                 if (request.status === 200) {
                     listaSerial = JSON.parse(request.responseText);
-                    var select = document.getElementById("select");
-                    for (var index = 0; index < listaSerial.length; index++) {
-                        select.options[select.options.length] =
-                            new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
-                        // #Falta validação do para desabilitar os seriais de acordo com slot e porta#
+                    if (listaSerial.localizedMessage) {
+                        setMensagensOptions("block", listaSerial.localizedMessage);
+                        setLoadingOptions("none", null);
+                    } else {
+                        var select = document.getElementById("select");
+                        for (var index = 0; index < listaSerial.length; index++) {
+                            select.options[select.options.length] =
+                                new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+                            // #Falta validação do para desabilitar os seriais de acordo com slot e porta#
+                        }
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
                     }
-                    setLoadingOptions("none", null);
-                    setFormOption("block");
                 }
             }
         }
