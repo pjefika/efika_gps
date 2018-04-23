@@ -14,10 +14,10 @@ $(document).ready(function () {
     * Script especifico da pagina \/ 
     */
     $("#assoc_id").click(function () {
-        setMensagensOptions("none", null);
+        setMensagensOptions("none", null, null);
         getSelectedValue();
         if (selected === undefined || selected == null) {
-            setMensagensOptions("block", "Por favor selecione um serial");
+            setMensagensOptions("block", "Por favor selecione um serial", "msg-error");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Realizando comando, aguarde...");
@@ -25,7 +25,7 @@ $(document).ready(function () {
             // Change to request and modify the msg
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia); // Success||Error msg
+                setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia, "msg-success"); // Success||Error msg
             }, 1000);
         }
     });
@@ -38,14 +38,14 @@ $(document).ready(function () {
                 instancia = split[1];
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
-                setMensagensOptions("none", null);
+                setMensagensOptions("none", null, null);
                 // document.getElementById("instancia").innerHTML = instancia;
                 /**
                 * Monta o obj de acordo com o caso de uso... 
                 */
                 mountCommand();
             } else {
-                setMensagensOptions("block", "A instância inserida é inválida");
+                setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
             }
         }
@@ -80,7 +80,7 @@ $(document).ready(function () {
                 if (request.status === 200) {
                     listaSerial = JSON.parse(request.responseText);
                     if (listaSerial.localizedMessage) {
-                        setMensagensOptions("block", listaSerial.localizedMessage);
+                        setMensagensOptions("block", listaSerial.localizedMessage, "msg-error");
                         setLoadingOptions("none", null);
                     } else {
                         var select = document.getElementById("select");
@@ -110,7 +110,9 @@ $(document).ready(function () {
         $("#loadingMensagem").text(msg);
     }
 
-    function setMensagensOptions(show, msg) {
+    function setMensagensOptions(show, msg, type) {
+        $("#mensagem").removeClass();
+        $("#mensagem").addClass(type)
         $("#mensagem").css("display", show);
         $("#textoMensagem").text(msg);
     }

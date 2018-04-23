@@ -11,13 +11,13 @@ $(document).ready(function () {
     $("#setchannel").click(function () {
         getSelectedValue();
         if (channel === undefined || channel == "") {
-            setMensagensOptions("block", "Por favor preencha todos os campos.");
+            setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Troca para o canal " + channel + " realizada com sucesso"); // Success msg
+                setMensagensOptions("block", "Troca para o canal " + channel + " realizada com sucesso", "msg-success"); // Success msg
             }, 1000);
         }
     });
@@ -34,13 +34,13 @@ $(document).ready(function () {
                 instancia = split[1];
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
-                setMensagensOptions("none", null);
+                setMensagensOptions("none", null, null);
                 /**
                 * Monta o obj de acordo com o caso de uso... 
                 */
                 mountCommand();
             } else {
-                setMensagensOptions("block", "A instância inserida é inválida");
+                setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
             }
         }
@@ -61,7 +61,9 @@ $(document).ready(function () {
         $("#loadingMensagem").text(msg);
     }
 
-    function setMensagensOptions(show, msg) {
+    function setMensagensOptions(show, msg, type) {
+        $("#mensagem").removeClass();
+        $("#mensagem").addClass(type)
         $("#mensagem").css("display", show);
         $("#textoMensagem").text(msg);
     }

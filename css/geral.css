@@ -10,3 +10,5 @@ select { width: 95%; border-radius: 4px; padding-top: 10px; padding-bottom: 10px
 input { width: 95%; padding-top: 10px; padding-bottom: 10px; margin:  10px 10px 10px 10px; }
 select, option { font-family: Courier, Comic Sans MS, Times, serif; font-size: 20px; }
 .version { opacity: 0.5; filter: alpha(opacity=5); /* For IE8 and earlier */; width: 95%; text-align: right; }
+.msg-success { background-color: #d4edda;  color: black; border: 1px solid #c3e6cb; width: 95%; margin: auto; padding-top: 7px; padding-bottom: 7px; margin-top: 10px; }
+.msg-error { background-color: #f8d7da;  color: black; border: 1px solid #f5c6cb; width: 95%; margin: auto; padding-top: 7px; padding-bottom: 7px; margin-top: 10px; }

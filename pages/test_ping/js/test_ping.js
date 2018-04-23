@@ -12,13 +12,13 @@ $(document).ready(function () {
     $("#ping").click(function () {
         getSelectedValue();
         console.log(input_ping);
-        
+
         if (input_ping === undefined || input_ping == null || input_ping == "") {
-            setMensagensOptions("block", "Por favor preencha o campo.");
+            setMensagensOptions("block", "Por favor preencha o campo.", "msg-error");
         } else {
             setLoadingOptions("block", "Aguarde...");
             setFormOption("none");
-            setMensagensOptions("none", null);
+            setMensagensOptions("none", null, null);
             setTimeout(function () {
 
                 setTableResultOptions("block");
@@ -31,7 +31,7 @@ $(document).ready(function () {
                 document.getElementById("repeticoes").innerHTML = "4";
 
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Ping realizado com sucesso."); // Success msg
+                setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
                 setFormOption("block")
             }, 1000);
         }
@@ -45,14 +45,14 @@ $(document).ready(function () {
                 instancia = split[1];
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
-                setMensagensOptions("none", null);
+                setMensagensOptions("none", null, null);
                 setTableResultOptions("none");
                 /**
                 * Monta o obj de acordo com o caso de uso... 
                 */
                 mountCommand();
             } else {
-                setMensagensOptions("block", "A instância inserida é inválida");
+                setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
             }
         }
@@ -77,7 +77,9 @@ $(document).ready(function () {
         $("#loadingMensagem").text(msg);
     }
 
-    function setMensagensOptions(show, msg) {
+    function setMensagensOptions(show, msg, type) {
+        $("#mensagem").removeClass();
+        $("#mensagem").addClass(type)
         $("#mensagem").css("display", show);
         $("#textoMensagem").text(msg);
     }
