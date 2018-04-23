@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    // http://10.40.195.81/fabio/efika_gps/pages/wificonf/wifichannel.html?instancia=123456789
     // Variaveis do sistema
     var instancia;
     var _data;
@@ -11,7 +11,7 @@ $(document).ready(function () {
     $("#setchannel").click(function () {
         getSelectedValue();
         if (channel === undefined || channel == "") {
-            setMensagensOptions("block", "Por favor preencha os campos.");
+            setMensagensOptions("block", "Por favor preencha todos os campos.");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");

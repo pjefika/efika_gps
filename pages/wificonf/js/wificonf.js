@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // http://10.40.195.81/fabio/efika_gps/pages/wificonf/wificonf.html?instancia=123456
     // Variaveis do sistema
     var instancia;
     var _data;
@@ -10,7 +11,7 @@ $(document).ready(function () {
     $("#setchannel").click(function () {
         setMensagensOptions("none", null);
         getSelectedValue();
-        console.log(user_pass);
+        // console.log(user_pass);
         if (user_pass.ssid == "" && user_pass.password == "" || user_pass.ssid == "") {
             setMensagensOptions("block", "Por favor preencha os campos.");
         } else {

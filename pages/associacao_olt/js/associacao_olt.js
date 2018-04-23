@@ -25,7 +25,7 @@ $(document).ready(function () {
             // Change to request and modify the msg
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia); // Success msg
+                setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia); // Success||Error msg
             }, 1000);
         }
     });

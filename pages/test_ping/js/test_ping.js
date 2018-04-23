@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     // http://10.40.195.81/fabio/efika_gps/pages/test_ping/test_ping.html?instancia=123456789
 
     // Variaveis do sistema
@@ -12,7 +11,9 @@ $(document).ready(function () {
 
     $("#ping").click(function () {
         getSelectedValue();
-        if (input_ping === undefined || input_ping == null) {
+        console.log(input_ping);
+        
+        if (input_ping === undefined || input_ping == null || input_ping == "") {
             setMensagensOptions("block", "Por favor preencha o campo.");
         } else {
             setLoadingOptions("block", "Aguarde...");

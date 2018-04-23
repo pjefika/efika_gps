@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <META http-equiv=Content-Type content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../../css/geral.css" type="text/css">
 <link rel="stylesheet" href="../../pages/wificonf/css/wificonf.css" type="text/css">
 <script src="../../js/jquery-1.10.2.min.js"></script>
 <script src="../../pages/wificonf/js/wificonf.js"></script>
-<div class="body-form">
+<div class="width-form">
     <div id="form">
         <label>SSID do modem</label>
         <br>
@@ -13,8 +14,7 @@
         <label>Senha do modem</label>
         <br>
         <input type="text" id="input_password" placeholder="Insira a senha">
-        <br>
-        <button type="button" id="setchannel">Modificar</button>
+        <button type="button" id="setchannel" class="btn btn-blue btn-block">Modificar</button>
     </div>
     <!-- Loading do comando -->
     <div id="loading">
@@ -25,5 +25,4 @@
         <p id="textoMensagem"></p>
     </div>
 </div>
-
 </html>
