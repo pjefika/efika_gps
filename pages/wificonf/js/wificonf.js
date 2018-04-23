@@ -26,7 +26,6 @@ $(document).ready(function () {
 
     /**
      * Importar para todos os scripts e Manter o padrão \/
-     * 
      */
     function getInstancia() {
         if (window.location.href) {

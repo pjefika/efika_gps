@@ -1,4 +1,4 @@
-.width-form { margin: auto; width: 50%; padding: 10px; text-align: center; font-family: Courier, Comic Sans MS, Times, serif;}
+.width-form { margin: auto; width: 50%; padding: 10px; text-align: center; font-family: Courier, Comic Sans MS, Times, serif; }
 .btn { border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin:  10px 10px 10px 10px; }
 .btn-block { width: 95%; }
 .btn-green { background-color: #4CAF50; } /* Green */
@@ -6,5 +6,6 @@
 .btn-red { background-color: #f44336; } /* Red */ 
 .btn-gray { background-color: #e7e7e7; color: black; } /* Gray */ 
 .btn-black { background-color: #555555; } /* Black */
-select { width: 95%; border-radius: 4px; }
-input { width: 95%; padding-top: 10px; padding-bottom: 10px; }
+select { width: 95%; border-radius: 4px; padding-top: 10px; padding-bottom: 10px; margin:  10px 10px 10px 10px; }
+input { width: 95%; padding-top: 10px; padding-bottom: 10px; margin:  10px 10px 10px 10px; }
+select, option { font-family: Courier, Comic Sans MS, Times, serif; font-size: 20px; }

@@ -39,7 +39,7 @@ $(document).ready(function () {
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
                 setMensagensOptions("none", null);
-                document.getElementById("instancia").innerHTML = instancia;
+                // document.getElementById("instancia").innerHTML = instancia;
                 /**
                 * Monta o obj de acordo com o caso de uso... 
                 */
