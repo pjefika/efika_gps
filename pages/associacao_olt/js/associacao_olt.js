@@ -14,6 +14,16 @@ $(document).ready(function () {
     * Script especifico da pagina \/ 
     */
     $("#assoc_id").click(function () {
+        assoc();
+    });
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            assoc();
+        }
+    });
+
+    function assoc() {
         setMensagensOptions("none", null, null);
         getSelectedValue();
         if (selected === undefined || selected == null) {
@@ -28,7 +38,7 @@ $(document).ready(function () {
                 setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia, "msg-success"); // Success||Error msg
             }, 1000);
         }
-    });
+    }
 
     function getInstancia() {
         if (window.location.href) {

@@ -10,6 +10,16 @@ $(document).ready(function () {
     getInstancia();
 
     $("#ping").click(function () {
+        pingar();
+    });
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            pingar();
+        }
+    });
+
+    function pingar() {
         getSelectedValue();
         console.log(input_ping);
 
@@ -35,7 +45,7 @@ $(document).ready(function () {
                 setFormOption("block")
             }, 1000);
         }
-    });
+    }
 
     function getInstancia() {
         if (window.location.href) {

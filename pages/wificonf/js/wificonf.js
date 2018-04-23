@@ -8,7 +8,17 @@ $(document).ready(function () {
 
     getInstancia();
 
-    $("#setchannel").click(function () {
+    $("#setwificonf").click(function () {
+        setWifiConf();
+    });
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            setWifiConf();
+        }
+    });
+
+    function setWifiConf() {
         setMensagensOptions("none", null, null);
         getSelectedValue();
         // console.log(user_pass);
@@ -22,7 +32,7 @@ $(document).ready(function () {
                 setMensagensOptions("block", "Configuração realizada com sucesso.", "msg-success"); // Success msg
             }, 1000);
         }
-    });
+    }
 
     /**
      * Importar para todos os scripts e Manter o padrão \/

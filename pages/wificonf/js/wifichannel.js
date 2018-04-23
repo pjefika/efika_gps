@@ -9,6 +9,16 @@ $(document).ready(function () {
     getInstancia();
 
     $("#setchannel").click(function () {
+        setChannel();
+    });
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            setChannel();
+        }
+    });
+
+    function setChannel() {
         getSelectedValue();
         if (channel === undefined || channel == "") {
             setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
@@ -20,7 +30,7 @@ $(document).ready(function () {
                 setMensagensOptions("block", "Troca para o canal " + channel + " realizada com sucesso", "msg-success"); // Success msg
             }, 1000);
         }
-    });
+    }
 
     /**
     * Importar para todos os scripts e Manter o padrão \/
