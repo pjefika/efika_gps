@@ -1,6 +1,5 @@
 $(document).ready(function () {
-    // http://10.40.195.81/fabio/efika_gps/pages/test_ping/test_ping.html?instancia=123456789
-
+    // http://10.40.195.81/efika_gps/pages/test_ping/test_ping.html?instancia=1234567890
     // Variaveis do sistema
     var instancia;
     var _data;

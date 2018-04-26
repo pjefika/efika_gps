@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // http://10.40.195.81/fabio/efika_gps/pages/wificonf/wifichannel.html?instancia=123456789
+    // http://10.40.195.81/efika_gps/pages/wificonf/wifichannel.html?instancia=123456789
     // Variaveis do sistema
     var instancia;
     var _data;
