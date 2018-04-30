@@ -34,15 +34,13 @@ $(document).ready(function () {
     }
 
     function doRequestSetSerial() {
+        setFormOption("none");
+        setLoadingOptions("block", "Realizando Associação da ONT, aguarde...");
         var _data = JSON.stringify({ "instancia": instancia, "parametro": selected, "execucao": "SET_ONT" });
         request = new XMLHttpRequest();
         request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
         request.setRequestHeader("Content-Type", "text/plain");
         request.send(_data);
-        request.onload = function () {
-            setFormOption("none");
-            setLoadingOptions("block", "Realizando Associação da ONT, aguarde...");
-        }
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 resultado = JSON.parse(request.responseText);
@@ -51,6 +49,7 @@ $(document).ready(function () {
                     setLoadingOptions("none", null);
                 } else {
                     setLoadingOptions("none", null);
+                    setFormOption("block");
                     if (resultado.localizedMessage) {
                         setMensagensOptions("block", resultado.localizedMessage, "msg-error");
                     } else {
@@ -85,10 +84,6 @@ $(document).ready(function () {
         request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
         request.setRequestHeader("Content-Type", "text/plain");
         request.send(_data);
-        request.onload = function () {
-            setFormOption("none");
-            setLoadingOptions("block", "Buscando ONT's livres, aguarde...");
-        }
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 resultado = JSON.parse(request.responseText);
@@ -96,7 +91,7 @@ $(document).ready(function () {
                     var listaSerial = resultado.valid.preresult;
                     var select = document.getElementById("select");
                     for (var index = 0; index < listaSerial.length; index++) {
-                        elect.options[select.options.length] =
+                        select.options[select.options.length] =
                             new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
                     }
                     setLoadingOptions("none", null);
