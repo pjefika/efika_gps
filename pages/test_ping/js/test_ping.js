@@ -41,7 +41,7 @@ $(document).ready(function () {
 
                 setLoadingOptions("none", null);
                 setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
-                setFormOption("block")
+                setFormOption("block");
             }, 1000);
         }
     }

@@ -2,9 +2,8 @@ $(document).ready(function () {
     // http://10.40.195.81/efika_gps/pages/associacao_olt/associacao_olt.html?instancia=1234567890
     // Variaveis do sistema
     var instancia;
-    var _data;
 
-    var listaSerial;
+    var resultado;
     var selected;
 
     // Chamada inicial
@@ -29,14 +28,36 @@ $(document).ready(function () {
         if (selected === undefined || selected == null) {
             setMensagensOptions("block", "Por favor selecione um serial", "msg-error");
         } else {
-            setFormOption("none");
-            setLoadingOptions("block", "Realizando comando, aguarde...");
             // Request
-            // Change to request and modify the msg
-            setTimeout(function () {
-                setLoadingOptions("none", null);
-                setMensagensOptions("block", "Selecionado o serial: " + selected + " & Instancia: " + instancia, "msg-success"); // Success||Error msg
-            }, 1000);
+            doRequestSetSerial();
+        }
+    }
+
+    function doRequestSetSerial() {
+        var _data = JSON.stringify({ "instancia": instancia, "parametro": selected, "execucao": "SET_ONT" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onload = function () {
+            setFormOption("none");
+            setLoadingOptions("block", "Realizando Associação da ONT, aguarde...");
+        }
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    setMensagensOptions("block", "Serial: " + selected + " associado com sucesso!", "msg-success");
+                    setLoadingOptions("none", null);
+                } else {
+                    setLoadingOptions("none", null);
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
         }
     }
 
@@ -50,10 +71,7 @@ $(document).ready(function () {
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
                 // document.getElementById("instancia").innerHTML = instancia;
-                /**
-                * Monta o obj de acordo com o caso de uso... 
-                */
-                mountCommand();
+                doRequestGetSerialDisp();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
@@ -61,46 +79,34 @@ $(document).ready(function () {
         }
     }
 
-    function mountCommand() {
-        _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
-        /**
-        * Informar Type -> POST || GET
-        * Informar URL/ 
-        */
-        validTypeRequest("POST", "http://10.40.198.168:7171/customerAPI/certification/ontsDisp");
-    }
-
-    function validTypeRequest(type, url) {
-        if (window.XDomainRequest) {
-            request = new XDomainRequest();
-            request.open(type, url);
-        } else if (window.XMLHttpRequest) {
-            request = new XMLHttpRequest();
-            request.open(type, url);
-            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    function doRequestGetSerialDisp() {
+        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_ONTS" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onload = function () {
+            setFormOption("none");
+            setLoadingOptions("block", "Buscando ONT's livres, aguarde...");
         }
-        // doRequest();
-        mockedalist();
-    }
-
-    function doRequest() {
-        request.send(JSON.stringify(_data));
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
                 if (request.status === 200) {
-                    listaSerial = JSON.parse(request.responseText);
-                    if (listaSerial.localizedMessage) {
-                        setMensagensOptions("block", listaSerial.localizedMessage, "msg-error");
-                        setLoadingOptions("none", null);
+                    var listaSerial = resultado.valid.preresult;
+                    var select = document.getElementById("select");
+                    for (var index = 0; index < listaSerial.length; index++) {
+                        elect.options[select.options.length] =
+                            new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+                    }
+                    setLoadingOptions("none", null);
+                    setFormOption("block");
+                } else {
+                    setLoadingOptions("none", null);
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
                     } else {
-                        var select = document.getElementById("select");
-                        for (var index = 0; index < listaSerial.length; index++) {
-                            select.options[select.options.length] =
-                                new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
-                            // #Falta validação do para desabilitar os seriais de acordo com slot e porta#
-                        }
-                        setLoadingOptions("none", null);
-                        setFormOption("block");
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }
                 }
             }
