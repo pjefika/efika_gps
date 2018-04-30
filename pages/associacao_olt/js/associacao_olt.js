@@ -89,13 +89,19 @@ $(document).ready(function () {
                 resultado = JSON.parse(request.responseText);
                 if (request.status === 200) {
                     var listaSerial = resultado.valid.preresult;
-                    var select = document.getElementById("select");
-                    for (var index = 0; index < listaSerial.length; index++) {
-                        select.options[select.options.length] =
-                            new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+                    if (listaSerial.length < 1) {
+                        setLoadingOptions("none", null);
+                        setMensagensOptions("block", "Lista de ONT's está vazia.", "msg-error");
+                    } else {
+                        var select = document.getElementById("select");
+                        for (var index = 0; index < listaSerial.length; index++) {
+                            select.options[select.options.length] =
+                                new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+                        }
+                        selectdisableoptions();
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
                     }
-                    setLoadingOptions("none", null);
-                    setFormOption("block");
                 } else {
                     setLoadingOptions("none", null);
                     if (resultado.localizedMessage) {
@@ -105,6 +111,17 @@ $(document).ready(function () {
                     }
                 }
             }
+        }
+    }
+
+    function selectdisableoptions() {
+        var listaSerial = resultado.valid.preresult;
+        for (var index = 0; index < listaSerial.length; index++) {
+            $("select option").each(function () {
+                if (listaSerial[index].slot !== resultado.customer.rede.slot && listaSerial[index].porta !== resultado.customer.rede.porta) {
+                    $('select').children('option[value="' + listaSerial[index].serial + '"]').attr('disabled', "disabled")
+                }
+            });
         }
     }
 
