@@ -57,40 +57,33 @@ $(document).ready(function () {
         setLoadingOptions("block", "Aguarde...");
         setTimeout(function () {
             for (var index = 0; index < eqplist.length; index++) {
-                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqplist[index].serial + " </td> <td> <button class='btn btn-blue' type='buttton' id='reset" + index + "' >Resetar</button> </td> </tr>");
-                $("#reset" + index).click(function () {
-                    console.log(eqplist[index]);
-                    
-                    doRequest(eqplist[index]);
-                });
+                var eqp = eqplist[index];
+                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue' type='buttton' id='reset" + index + "' >Resetar</button> </td> </tr>");
             }
             setLoadingOptions("none", null);
             setFormOption("block");
-
-            // jqueryactionmount();
+            mountRequest();
         }, 1000);
     }
 
-    function jqueryactionmount() {
-        for (var index = 0; index < eqplist.length; index++) {
+    function mountRequest() {
+        $("tr").each(function (index) {
             $("#reset" + index).click(function () {
-                doRequest(eqplist[index]);
+                doRequest(index);
             });
-        }
+        });
     }
 
-    function doRequest(eqp) {
-        // console.log(eqp);
-
+    function doRequest(i) {
+        var eqp = eqplist[i];
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
         setMensagensOptions("none", null, null);
         setTimeout(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
-            // setMensagensOptions("block", "Reset no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
+            setMensagensOptions("block", "Reset no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
         }, 1500);
-
     }
 
     /**

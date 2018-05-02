@@ -106,6 +106,7 @@ $(document).ready(function () {
                     setLoadingOptions("none", null);
                     if (resultado.localizedMessage) {
                         setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                        setFormOption("block");
                     } else {
                         setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }
