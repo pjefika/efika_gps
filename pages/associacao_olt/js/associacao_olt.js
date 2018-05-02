@@ -52,6 +52,7 @@ $(document).ready(function () {
                     setFormOption("block");
                     if (resultado.localizedMessage) {
                         setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                        setFormOption("block");
                     } else {
                         setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }
@@ -105,8 +106,7 @@ $(document).ready(function () {
                 } else {
                     setLoadingOptions("none", null);
                     if (resultado.localizedMessage) {
-                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
-                        setFormOption("block");
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");                        
                     } else {
                         setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }

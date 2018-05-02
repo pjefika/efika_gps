@@ -2,7 +2,6 @@ $(document).ready(function () {
     // http://10.40.195.81/efika_gps/pages/reboot/reboot.html?instancia=123456789
     // Variaveis do sistema
     var instancia;
-    var _data;
 
     var eqplist;
 
@@ -18,9 +17,6 @@ $(document).ready(function () {
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
                 setTableResultOptions("none");
-                /**
-                * Monta o obj de acordo com o caso de uso... 
-                */
                 mountCommand();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
@@ -30,14 +26,9 @@ $(document).ready(function () {
     }
 
     function mountCommand() {
-        _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
-        setLoadingOptions("none", null);
-        setFormOption("block");
 
-        geteqplist();
-    }
+        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
 
-    function geteqplist() {
         eqplist = [
             {
                 serial: "11111", guid: 1
@@ -51,14 +42,14 @@ $(document).ready(function () {
         ];
         mounttable();
     }
-
+    
     function mounttable() {
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
         setTimeout(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
-                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue' type='buttton' id='reset" + index + "' >Resetar</button> </td> </tr>");
+                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='reset" + index + "' >Resetar</button> </td> </tr>");
             }
             setLoadingOptions("none", null);
             setFormOption("block");
