@@ -3,6 +3,8 @@ $(document).ready(function () {
     // Variaveis do sistema
     var instancia;
 
+    var eqplist;
+
     getInstancia();
 
     function getInstancia() {
@@ -25,15 +27,69 @@ $(document).ready(function () {
 
     function mountCommand() {
 
-        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_EQP_FIRMWARE" });
+        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
 
-        console.log(_data);
-
-
-
+        eqplist = [
+            {
+                serial: "11111", guid: 1, mandatorio: "123", atual: "123"
+            },
+            {
+                serial: "22222", guid: 2, mandatorio: "123", atual: "122"
+            },
+            {
+                serial: "33333", guid: 3, mandatorio: "123", atual: "123"
+            }
+        ];
+        mounttable();
     }
 
+    function mounttable() {
+        setFormOption("none");
+        setLoadingOptions("block", "Aguarde...");
+        setTimeout(function () {
+            for (var index = 0; index < eqplist.length; index++) {
+                var eqp = eqplist[index];
 
+                var setupclass;
+                var setupbtnname;
+                var disabled;
+                if (eqp.mandatorio != eqp.atual) {
+                    setupbtnname = "Atualizar";
+                    setupclass = "btn-red";
+                    disabled = false;
+                } else {
+                    setupbtnname = "Atualizado";
+                    setupclass = "btn-gray";
+                    disabled = true;
+                }
+                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td>  <td> " + eqp.atual + " </td> <td> <button class='btn " + setupclass + " btn-margin-bottom' type='buttton' id='update" + index + "' >" + setupbtnname + "</button> </td> </tr>");
+                $("#update" + index).prop("disabled", disabled);
+            }
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            mountRequest();
+        }, 1000);
+    }
+
+    function mountRequest() {
+        $("tr").each(function (index) {
+            $("#update" + index).click(function () {
+                doRequest(index);
+            });
+        });
+    }
+
+    function doRequest(i) {
+        var eqp = eqplist[i];
+        setFormOption("none");
+        setLoadingOptions("block", "Aguarde...");
+        setMensagensOptions("none", null, null);
+        setTimeout(function () {
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            setMensagensOptions("block", "Equipamento " + eqp.serial + " foi atualizado com sucesso.", "msg-success"); // Success msg
+        }, 1500);
+    }
 
     /**
     * Importar para todos os scripts e Manter o padrão \/
