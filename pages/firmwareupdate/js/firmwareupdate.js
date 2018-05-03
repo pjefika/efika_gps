@@ -17,6 +17,7 @@ $(document).ready(function () {
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
                 setTableResultOptions("none");
+                setBtnUpdateOption("none");
                 mountCommand();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
@@ -34,13 +35,22 @@ $(document).ready(function () {
         var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
         eqplist = [
             {
-                serial: "11111", guid: 1, mandatorio: "123", atual: "123"
+                serial: "11111",
+                guid: 1,
+                mandatorio: "123",
+                atual: "122"
             },
             {
-                serial: "22222", guid: 2, mandatorio: "123", atual: "122"
+                serial: "22222",
+                guid: 2,
+                mandatorio: "123",
+                atual: "122"
             },
             {
-                serial: "33333", guid: 3, mandatorio: "123", atual: "123"
+                serial: "33333",
+                guid: 3,
+                mandatorio: "123",
+                atual: "123"
             }
         ];
         mounttable();
@@ -50,6 +60,7 @@ $(document).ready(function () {
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
         $("#eqpListbody").empty();
+        setMensagensOptions("none", null, null);
         setTimeout(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
@@ -90,15 +101,20 @@ $(document).ready(function () {
         setTimeout(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
-            setMensagensOptions("block", "Comando enviado para o equipamento " + eqp.serial + " com sucesso, aguarde o modem finalizar a configuração.", "msg-success"); // Success msg
-            hideupdatebtns();
+            setMensagensOptions("block", "Comando enviado para o equipamento " + eqp.serial + " com sucesso, aguarde o modem finalizar a atualização.", "msg-success"); // Success msg
+            hideupdatebtns(i);
         }, 1500);
+        setBtnUpdateOption("block");
     }
 
-    function hideupdatebtns() {
-        $("tr").each(function (index) {
-            $("#update" + index).prop("disabled", true);
+    function hideupdatebtns(i) {
+        $("tr").each(function () {
+            $("#update" + i).prop("disabled", true);
         });
+    }
+
+    function setBtnUpdateOption(show) {
+        $("#updateall").css("display", show)
     }
 
     /**

@@ -7,7 +7,7 @@
 .width-form { margin: auto; padding: 10px; text-align: center; font-family: Courier, Comic Sans MS, Times, serif; }
 .btn { border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin-top: 10px; }
 .btn-margin-bottom { margin-bottom: 10px; }
-.btn-block { width: 95%; }
+.btn-block { width: 95%; margin-left: auto; margin-right: auto }
 .btn-green { background-color: #4CAF50; } /* Green */
 .btn-blue { background-color: #008CBA; } /* Blue */
 .btn-red { background-color: #f44336; } /* Red */ 

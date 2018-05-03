@@ -30,7 +30,8 @@ $(document).ready(function () {
         var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_EQP_DISP_CON" });
         eqplist = [
             {
-                serial: "11111", guid: 1,
+                serial: "11111",
+                guid: 1,
                 dispositivos: [
                     {
                         dispositivo: "ABC",
@@ -43,7 +44,8 @@ $(document).ready(function () {
                 ]
             },
             {
-                serial: "22222", guid: 2
+                serial: "22222",
+                guid: 2
                 ,
                 dispositivos: [
                     {
@@ -53,7 +55,8 @@ $(document).ready(function () {
                 ]
             },
             {
-                serial: "33333", guid: 3,
+                serial: "33333",
+                guid: 3,
                 dispositivos: [
                     {
                         dispositivo: "ABC",
