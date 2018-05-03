@@ -84,7 +84,7 @@ $(document).ready(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
             setEqpListOption("block");
-            // setDispListOption("none");
+            setDispListOption("none");
             mountRequest();
         }, 1000);
     }
@@ -93,8 +93,6 @@ $(document).ready(function () {
         $("tr").each(function (index) {
             $("#view" + index).click(function () {
                 $("#dispListbody").empty();
-                // setEqpListOption("none");
-                // setDispListOption("block");
                 mountTableListDisp(index);
             });
         });
@@ -102,7 +100,7 @@ $(document).ready(function () {
 
     function mountTableListDisp(i) {
         var disp = eqplist[i].dispositivos;
-        // setDispListOption("block");
+        setDispListOption("block");
         for (var index = 0; index < disp.length; index++) {
             var dispE = disp[index];
             $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> </tr>");

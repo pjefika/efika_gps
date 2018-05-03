@@ -25,10 +25,13 @@ $(document).ready(function () {
         }
     }
 
+    $("#updateall").click(function () {
+        mountCommand();
+
+    });
+
     function mountCommand() {
-
         var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
-
         eqplist = [
             {
                 serial: "11111", guid: 1, mandatorio: "123", atual: "123"
@@ -46,10 +49,10 @@ $(document).ready(function () {
     function mounttable() {
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
+        $("#eqpListbody").empty();
         setTimeout(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
-
                 var setupclass;
                 var setupbtnname;
                 var disabled;
@@ -87,8 +90,15 @@ $(document).ready(function () {
         setTimeout(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
-            setMensagensOptions("block", "Equipamento " + eqp.serial + " foi atualizado com sucesso.", "msg-success"); // Success msg
+            setMensagensOptions("block", "Comando enviado para o equipamento " + eqp.serial + " com sucesso, aguarde o modem finalizar a configuração.", "msg-success"); // Success msg
+            hideupdatebtns();
         }, 1500);
+    }
+
+    function hideupdatebtns() {
+        $("tr").each(function (index) {
+            $("#update" + index).prop("disabled", true);
+        });
     }
 
     /**
