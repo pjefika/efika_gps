@@ -37,20 +37,20 @@ $(document).ready(function () {
             {
                 serial: "11111",
                 guid: 1,
-                mandatorio: "123",
-                atual: "122"
+                mandatorio: "1.2.3",
+                atual: "1.2.2"
             },
             {
                 serial: "22222",
                 guid: 2,
-                mandatorio: "123",
-                atual: "122"
+                mandatorio: "1.2.3",
+                atual: "1.2.2"
             },
             {
                 serial: "33333",
                 guid: 3,
-                mandatorio: "123",
-                atual: "123"
+                mandatorio: "1.2.3",
+                atual: "1.2.3"
             }
         ];
         mounttable();
@@ -76,7 +76,7 @@ $(document).ready(function () {
                     setupclass = "btn-gray";
                     disabled = true;
                 }
-                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td>  <td> " + eqp.atual + " </td> <td> <button class='btn " + setupclass + " btn-margin-bottom' type='buttton' id='update" + index + "' >" + setupbtnname + "</button> </td> </tr>");
+                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td>  <td> " + eqp.atual + " </td> <td> " + eqp.mandatorio + " </td> <td> <button class='btn " + setupclass + " btn-margin-bottom' type='buttton' id='update" + index + "' >" + setupbtnname + "</button> </td> </tr>");
                 $("#update" + index).prop("disabled", disabled);
             }
             setLoadingOptions("none", null);

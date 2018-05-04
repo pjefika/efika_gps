@@ -106,6 +106,7 @@ $(document).ready(function () {
         setDispListOption("block");
         for (var index = 0; index < disp.length; index++) {
             var dispE = disp[index];
+            $("#titledisplist").text(eqplist[i].serial);
             $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> </tr>");
         }
     }
