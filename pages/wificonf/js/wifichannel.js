@@ -6,28 +6,32 @@ $(document).ready(function () {
 
     var channel;
 
+    var channelList;
+
     getInstancia();
 
-    $("#setchannel").click(function () {
-        setChannel();
+    $("#setchannel_0").click(function () {
+        setChannel(0);
     });
 
-    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            setChannel();
-        }
+    $("#setchannel_1").click(function () {
+        setChannel(1);
     });
 
-    function setChannel() {
-        getSelectedValue();
-        if (channel === undefined || channel == "") {
+    function setChannel(i) {
+        setMensagensOptions("none", null, null);
+        getSelectedValue(i);
+        var ochannel = channelList[i];
+        ochannel.channel = channel;
+        if (ochannel.channel === undefined || ochannel.channel == "") {
             setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Troca para o canal " + channel + " realizada com sucesso", "msg-success"); // Success msg
+                setMensagensOptions("block", "Troca da rede " + ochannel.ssid + " para o canal " + ochannel.channel + " realizada com sucesso", "msg-success"); // Success msg
+                setFormOption("block");
             }, 1000);
         }
     }
@@ -60,6 +64,14 @@ $(document).ready(function () {
         _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
         setLoadingOptions("none", null);
         setFormOption("block");
+        getChannelList();
+    }
+
+    function getChannelList() {
+        channelList = [{ channel: "1", ssid: "rede2.4Ghz" },
+        { channel: "5", ssid: "rede5Ghz" }];
+        document.getElementById("channel_0").value = channelList[0].channel;
+        document.getElementById("channel_1").value = channelList[1].channel;
     }
 
     function setFormOption(show) {
@@ -78,7 +90,7 @@ $(document).ready(function () {
         $("#textoMensagem").text(msg);
     }
 
-    function getSelectedValue() {
-        channel = $("#channel").val();
+    function getSelectedValue(i) {
+        channel = $("#channel_" + i).val();
     }
 });

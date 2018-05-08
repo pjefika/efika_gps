@@ -63,7 +63,6 @@ $(document).ready(function () {
         _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
         setLoadingOptions("none", null);
         setFormOption("block");
-
         getWifiList();
     }
 
