@@ -6,30 +6,32 @@ $(document).ready(function () {
 
     var user_pass;
 
+    var wifilist;
+
     getInstancia();
 
-    $("#setwificonf").click(function () {
-        setWifiConf();
+    $("#setwificonf_1").click(function () {
+        setWifiConf(0);
     });
 
-    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            setWifiConf();
-        }
+    $("#setwificonf_2").click(function () {
+        setWifiConf(1);
     });
 
-    function setWifiConf() {
+    function setWifiConf(i) {
+        var wifi = wifilist[i]
         setMensagensOptions("none", null, null);
-        getSelectedValue();
+        getSelectedValue(i);
         // console.log(user_pass);
-        if (user_pass.ssid == "" && user_pass.password == "" || user_pass.ssid == "") {
+        if (wifi.ssid == "" && wifi.password == "" || wifi.ssid == "") {
             setMensagensOptions("block", "Por favor preencha os campos.", "msg-error");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Configuração realizada com sucesso.", "msg-success"); // Success msg
+                setMensagensOptions("block", "Configuração na rede " + wifi.ssid + " realizada com sucesso.", "msg-success"); // Success msg
+                setFormOption("block");
             }, 1000);
         }
     }
@@ -61,6 +63,18 @@ $(document).ready(function () {
         _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
         setLoadingOptions("none", null);
         setFormOption("block");
+
+        getWifiList();
+    }
+
+
+    function getWifiList() {
+        wifilist = [{ ssid: "user2.4Ghz", password: "" },
+        { ssid: "user5Ghz", password: "" }];
+        document.getElementById("input_ssid_1").value = wifilist[0].ssid;
+        document.getElementById("input_password_1").value = wifilist[0].password;
+        document.getElementById("input_ssid_2").value = wifilist[1].ssid;
+        document.getElementById("input_password_2").value = wifilist[1].password;
     }
 
     function setFormOption(show) {
@@ -79,10 +93,10 @@ $(document).ready(function () {
         $("#textoMensagem").text(msg);
     }
 
-    function getSelectedValue() {
+    function getSelectedValue(i) {
         user_pass = {
-            ssid: $("#input_ssid").val(),
-            password: $("#input_password").val()
+            ssid: $("#input_ssid_" + i).val(),
+            password: $("#input_password_" + i).val()
         }
     }
 });

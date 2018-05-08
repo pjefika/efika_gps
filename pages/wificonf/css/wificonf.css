@@ -1,0 +1,8 @@
+.row {
+    width: 100%;
+}
+
+.col {
+    width: 48%;
+    display: inline-block;
+}
