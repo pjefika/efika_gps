@@ -49,7 +49,7 @@ $(document).ready(function () {
         setTimeout(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
-                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='reset" + index + "' >Resetar</button> </td> </tr>");
+                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='reset" + index + "' >Reboot</button> </td> </tr>");
             }
             setLoadingOptions("none", null);
             setFormOption("block");
