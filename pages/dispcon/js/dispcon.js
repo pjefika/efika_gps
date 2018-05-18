@@ -35,11 +35,13 @@ $(document).ready(function () {
                 dispositivos: [
                     {
                         dispositivo: "ABC",
-                        status: "ativo"
+                        status: "ativo",
+                        conected: "Wifi"
                     },
                     {
                         dispositivo: "BAC",
-                        status: "inativo"
+                        status: "inativo",
+                        conected: "Cabo"
                     }
                 ]
             },
@@ -50,7 +52,8 @@ $(document).ready(function () {
                 dispositivos: [
                     {
                         dispositivo: "ABC",
-                        status: "inativo"
+                        status: "inativo",
+                        conected: "Wifi"
                     }
                 ]
             },
@@ -60,15 +63,18 @@ $(document).ready(function () {
                 dispositivos: [
                     {
                         dispositivo: "ABC",
-                        status: "ativo"
+                        status: "ativo",
+                        conected: "Wifi"
                     },
                     {
                         dispositivo: "BAC",
-                        status: "ativo"
+                        status: "ativo",
+                        conected: "Cabo"
                     },
                     {
                         dispositivo: "CAB",
-                        status: "inativo"
+                        status: "inativo",
+                        conected: "Cabo"
                     }
                 ]
             }
@@ -107,7 +113,7 @@ $(document).ready(function () {
         for (var index = 0; index < disp.length; index++) {
             var dispE = disp[index];
             $("#titledisplist").text(eqplist[i].serial);
-            $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> </tr>");
+            $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> <td> " + dispE.conected + " </td> </tr>");
         }
     }
 

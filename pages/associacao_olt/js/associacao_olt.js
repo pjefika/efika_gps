@@ -6,6 +6,7 @@ $(document).ready(function () {
     var resultado;
     var selected;
 
+    var listmockserial = [{"serial":"1111111111 / Slot: 1 - Porta: 1","porta":1,"slot":1},{"serial":"2222222222 / Slot: 2 - Porta: 2","porta":2,"slot":2}];
     // Chamada inicial
     getInstancia();
 
@@ -71,7 +72,8 @@ $(document).ready(function () {
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
                 // document.getElementById("instancia").innerHTML = instancia;
-                doRequestGetSerialDisp();
+                // doRequestGetSerialDisp();
+                mockedalist();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
@@ -106,7 +108,7 @@ $(document).ready(function () {
                 } else {
                     setLoadingOptions("none", null);
                     if (resultado.localizedMessage) {
-                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");                        
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
                     } else {
                         setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }
@@ -120,6 +122,17 @@ $(document).ready(function () {
         for (var index = 0; index < listaSerial.length; index++) {
             $("select option").each(function () {
                 if (listaSerial[index].slot !== resultado.customer.rede.slot && listaSerial[index].porta !== resultado.customer.rede.porta) {
+                    $('select').children('option[value="' + listaSerial[index].serial + '"]').attr('disabled', "disabled")
+                }
+            });
+        }
+    }
+
+    function selectdisableoptionsMock() {
+        var listaSerial = listmockserial;
+        for (var index = 0; index < listaSerial.length; index++) {
+            $("select option").each(function () {
+                if (listaSerial[index].slot !== 2 && listaSerial[index].porta !== 2) {
                     $('select').children('option[value="' + listaSerial[index].serial + '"]').attr('disabled', "disabled")
                 }
             });
@@ -151,14 +164,20 @@ $(document).ready(function () {
     }
 
     function mockedalist() {
-        var select = document.getElementById("select");
-        var list = [{ "serial": "1111111111 / Slot: 1 - Porta: 1" }, { "serial": "2222222222 / Slot: 2 - Porta: 2" }];
-        for (var index = 0; index < list.length; index++) {
-            select.options[select.options.length] =
-                new Option(list[index].serial, list[index].serial);
+        var listaSerial = listmockserial;
+        if (listaSerial.length < 1) {
+            setLoadingOptions("none", null);
+            setMensagensOptions("block", "Lista de ONT's está vazia.", "msg-error");
+        } else {
+            var select = document.getElementById("select");
+            for (var index = 0; index < listaSerial.length; index++) {
+                select.options[select.options.length] =
+                    new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+            }
+            selectdisableoptionsMock();
+            setLoadingOptions("none", null);
+            setFormOption("block");
         }
-        setLoadingOptions("none", null);
-        setFormOption("block");
     }
 
 });
