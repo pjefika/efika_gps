@@ -9,38 +9,53 @@
 <div class="width-form">
     <h3>Teste de Ping</h3>
     <div id="form">
-        <label>Insira o Endereço</label>
-        <input type="text" id="input_ping" placeholder="Site ou Ip">        
-        <button type="button" id="ping" class="btn btn-blue btn-block">Realizar Ping</button>       
-        <div id="table_result">
-            <table>
-                <tbody>
+
+        <div>
+            <table id="eqplist">
+                <thead>
                     <tr>
-                        <th>Status</th>
-                        <td id="status"></td>
+                        <th>Equipamento</th>
+                        <th>Ação</th>
                     </tr>
-                    <tr>
-                        <th>Endereço</th>
-                        <td id="endereco"></td>
-                    </tr>
-                    <tr>
-                        <th>Tempo</th>
-                        <td id="tempo"></td>
-                    </tr>
-                    <tr>
-                        <th>Quantidade Sucesso</th>
-                        <td id="qntS"></td>
-                    </tr>
-                    <tr>
-                        <th>Quantidade Erro </th>
-                        <td id="qntE"></td>
-                    </tr>
-                    <tr>
-                        <th>Repetições</th>
-                        <td id="repeticoes"></td>
-                    </tr>
+                </thead>
+                <tbody id="eqpListbody">
                 </tbody>
             </table>
+        </div>
+        <div id="doping">
+            <label>Insira o Endereço</label>
+            <input type="text" id="input_ping" placeholder="Site ou Ip">
+            <button type="button" id="ping" class="btn btn-blue btn-block">Realizar Ping</button>
+            <div id="table_result">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Status</th>
+                            <td id="status"></td>
+                        </tr>
+                        <tr>
+                            <th>Endereço</th>
+                            <td id="endereco"></td>
+                        </tr>
+                        <tr>
+                            <th>Tempo</th>
+                            <td id="tempo"></td>
+                        </tr>
+                        <tr>
+                            <th>Quantidade Sucesso</th>
+                            <td id="qntS"></td>
+                        </tr>
+                        <tr>
+                            <th>Quantidade Erro </th>
+                            <td id="qntE"></td>
+                        </tr>
+                        <tr>
+                            <th>Repetições</th>
+                            <td id="repeticoes"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!-- Loading do comando -->

@@ -3,9 +3,9 @@ $(document).ready(function () {
     // Variaveis do sistema    
     var instancia;
     var eqplist;
+    var eqpselected;
     var wificonfs;
     var wifiselected;
-    var eqpselected;
 
     getInstancia();
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
             console.log(wifiselected);
             console.log(eqpselected);
             setLoadingOptions("none", null);
-            setConfFifisOption("none");
+            setConfWifisOption("none");
             setFormOption("block");
             setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
         }, 1000);
@@ -43,7 +43,7 @@ $(document).ready(function () {
                 setLoadingOptions("block", "Aguarde buscando equipamentos...");
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
-                setConfFifisOption("none");
+                setConfWifisOption("none");
                 getListEeqp();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
@@ -74,7 +74,7 @@ $(document).ready(function () {
             $("#view" + index).click(function () {
                 setLoadingOptions("block", "Aguarde buscando informações...");
                 setFormOption("none");
-                setConfFifisOption("none");
+                setConfWifisOption("none");
                 setMensagensOptions("none", null, null);
                 mountWifiConfs(index);
             });
@@ -95,7 +95,7 @@ $(document).ready(function () {
 
             setLoadingOptions("none", null);
             setFormOption("block");
-            setConfFifisOption("block");
+            setConfWifisOption("block");
         }, 1000);
     }
 
@@ -107,7 +107,7 @@ $(document).ready(function () {
         $("#form").css("display", show);
     }
 
-    function setConfFifisOption(show) {
+    function setConfWifisOption(show) {
         $("#confwifis").css("display", show);
     }
 
