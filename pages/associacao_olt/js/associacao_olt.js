@@ -6,7 +6,7 @@ $(document).ready(function () {
     var resultado;
     var selected;
 
-    var listmockserial = [{"serial":"1111111111 / Slot: 1 - Porta: 1","porta":1,"slot":1},{"serial":"2222222222 / Slot: 2 - Porta: 2","porta":2,"slot":2}];
+    var listmockserial = [{ "serial": "1111111111 / Slot: 1 - Porta: 1", "porta": 1, "slot": 1 }, { "serial": "2222222222 / Slot: 2 - Porta: 2", "porta": 2, "slot": 2 }];
     // Chamada inicial
     getInstancia();
 
@@ -30,7 +30,8 @@ $(document).ready(function () {
             setMensagensOptions("block", "Por favor selecione um serial", "msg-error");
         } else {
             // Request
-            doRequestSetSerial();
+            // doRequestSetSerial();
+            mockdaassoc();
         }
     }
 
@@ -178,6 +179,15 @@ $(document).ready(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
         }
+    }
+
+    function mockdaassoc() {
+        setFormOption("none");
+        setLoadingOptions("block", "Realizando Associação da ONT, aguarde...");
+        setTimeout(function () {
+            setMensagensOptions("block", "Serial: " + selected + " associado com sucesso!", "msg-success");
+            setLoadingOptions("none", null);
+        }, 1000);
     }
 
 });
