@@ -165,20 +165,25 @@ $(document).ready(function () {
     }
 
     function mockedalist() {
-        var listaSerial = listmockserial;
-        if (listaSerial.length < 1) {
-            setLoadingOptions("none", null);
-            setMensagensOptions("block", "Lista de ONT's está vazia.", "msg-error");
-        } else {
-            var select = document.getElementById("select");
-            for (var index = 0; index < listaSerial.length; index++) {
-                select.options[select.options.length] =
-                    new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+        setLoadingOptions("block", "Buscando lista de ONT's");
+        setTimeout(function () {
+            var listaSerial = listmockserial;
+            if (listaSerial.length < 1) {
+                setLoadingOptions("none", null);
+                setMensagensOptions("block", "Lista de ONT's está vazia.", "msg-error");
+            } else {
+                var select = document.getElementById("select");
+                for (var index = 0; index < listaSerial.length; index++) {
+                    select.options[select.options.length] =
+                        new Option(listaSerial[index].serial + " / Slot: " + listaSerial[index].slot + " - Porta: " + listaSerial[index].porta, listaSerial[index].serial);
+                }
+                selectdisableoptionsMock();
+                setLoadingOptions("none", null);
+                setFormOption("block");
             }
-            selectdisableoptionsMock();
-            setLoadingOptions("none", null);
-            setFormOption("block");
-        }
+        }, 1000);
+
+
     }
 
     function mockdaassoc() {

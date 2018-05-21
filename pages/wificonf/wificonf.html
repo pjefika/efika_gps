@@ -4,31 +4,48 @@
 <link rel="stylesheet" href="../../css/geral.css" type="text/css">
 <link rel="stylesheet" href="../../pages/wificonf/css/wificonf.css" type="text/css">
 <script src="../../js/jquery-1.10.2.min.js"></script>
+<script src="../../js/json2.js"></script>
 <script src="../../pages/wificonf/js/wificonf.js"></script>
 <script src="../../js/geral.js"></script>
 <div class="width-form">
     <h3>Configurações de Wifi</h3>
     <div id="form">
-        <div class="row">
-            <div class="col">
-                <h3>Rede 1</h3>
-                <label>SSID do modem</label>
-                <input type="text" id="input_ssid_1" placeholder="SSID do modem">
-                <br>
-                <label>Senha do modem</label>
-                <input type="text" id="input_password_1" placeholder="Insira a senha">
-                <button type="button" id="setwificonf_1" class="btn btn-blue btn-block">Modificar</button>
-            </div>
-            <div class="col">
-                <h3>Rede 2</h3>
-                <label>SSID do modem</label>
-                <input type="text" id="input_ssid_2" placeholder="SSID do modem">
-                <br>
-                <label>Senha do modem</label>
-                <input type="text" id="input_password_2" placeholder="Insira a senha">
-                <button type="button" id="setwificonf_2" class="btn btn-blue btn-block">Modificar</button>
+        <div>
+            <table id="eqplist">
+                <thead>
+                    <tr>
+                        <th>Equipamento</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="eqpListbody">
+                </tbody>
+            </table>
+        </div>
+        <div id="confwifis">
+            <div class="row">
+                <div class="col">
+                    <h3>Rede 1</h3>
+                    <label>SSID do modem</label>
+                    <input type="text" id="input_ssid_1" placeholder="SSID do modem">
+                    <br>
+                    <label>Senha do modem</label>
+                    <input type="text" id="input_password_1" placeholder="Insira a senha">
+                    <button type="button" id="setwificonf_1" class="btn btn-blue btn-block">Modificar</button>
+                </div>
+                <div class="col col-magin-left">
+                    <h3>Rede 2</h3>
+                    <label>SSID do modem</label>
+                    <input type="text" id="input_ssid_2" placeholder="SSID do modem">
+                    <br>
+                    <label>Senha do modem</label>
+                    <input type="text" id="input_password_2" placeholder="Insira a senha">
+                    <button type="button" id="setwificonf_2" class="btn btn-blue btn-block">Modificar</button>
+                </div>
             </div>
         </div>
+
+
     </div>
     <!-- Loading do comando -->
     <div id="loading">

@@ -1,57 +1,50 @@
 $(document).ready(function () {
     // http://10.40.195.81/efika_gps/pages/wificonf/wificonf.html?instancia=123456
-    // Variaveis do sistema
+    // Variaveis do sistema    
     var instancia;
-    var _data;
-
-    var user_pass;
-
-    var wifilist;
+    var eqplist;
+    var wificonfs;
+    var wifiselected;
+    var eqpselected;
 
     getInstancia();
 
     $("#setwificonf_1").click(function () {
-        setWifiConf(0);
+        // REDE 2.4GHZ
+        getSelectedValue(1);
+        setwificonf();
     });
 
     $("#setwificonf_2").click(function () {
-        setWifiConf(1);
+        // REDE 5GHZ
+        getSelectedValue(2);
+        setwificonf();
     });
 
-    function setWifiConf(i) {
-        var wifi = wifilist[i]
-        setMensagensOptions("none", null, null);
-        getSelectedValue(i);
-        // console.log(user_pass);
-        if (wifi.ssid == "" && wifi.password == "" || wifi.ssid == "") {
-            setMensagensOptions("block", "Por favor preencha os campos.", "msg-error");
-        } else {
-            setFormOption("none");
-            setLoadingOptions("block", "Aguarde...");
-            setTimeout(function () {
-                setLoadingOptions("none", null);
-                setMensagensOptions("block", "Configuração na rede " + wifi.ssid + " realizada com sucesso.", "msg-success"); // Success msg
-                setFormOption("block");
-            }, 1000);
-        }
+    function setwificonf() {
+        setLoadingOptions("block", "Aguarde realizando configurações de wifi no modem...");
+        setFormOption("none");
+        setTimeout(function () {
+            console.log(wifiselected);
+            console.log(eqpselected);
+            setLoadingOptions("none", null);
+            setConfFifisOption("none");
+            setFormOption("block");
+            setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+        }, 1000);
     }
 
-    /**
-     * Importar para todos os scripts e Manter o padrão \/
-     */
     function getInstancia() {
         if (window.location.href) {
             var link = window.location.href;
             var split = link.split("=");
             if (split[1]) {
                 instancia = split[1];
-                setLoadingOptions("block", "Aguarde...");
+                setLoadingOptions("block", "Aguarde buscando equipamentos...");
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
-                /**
-                * Monta o obj de acordo com o caso de uso... 
-                */
-                mountCommand();
+                setConfFifisOption("none");
+                getListEeqp();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
                 setFormOption("none");
@@ -59,25 +52,63 @@ $(document).ready(function () {
         }
     }
 
-    function mountCommand() {
-        _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
-        setLoadingOptions("none", null);
-        setFormOption("block");
-        getWifiList();
+    function getListEeqp() {
+        setTimeout(function () {
+            eqplist = [
+                { serial: "11111", guid: 1 },
+                { serial: "22222", guid: 2 },
+                { serial: "333333", guid: 3 }
+            ];
+            for (var index = 0; index < eqplist.length; index++) {
+                var eqp = eqplist[index];
+                $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+            }
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            mountclickineqp();
+        }, 1000);
     }
 
-
-    function getWifiList() {
-        wifilist = [{ ssid: "user2.4Ghz", password: "" },
-        { ssid: "user5Ghz", password: "" }];
-        document.getElementById("input_ssid_1").value = wifilist[0].ssid;
-        document.getElementById("input_password_1").value = wifilist[0].password;
-        document.getElementById("input_ssid_2").value = wifilist[1].ssid;
-        document.getElementById("input_password_2").value = wifilist[1].password;
+    function mountclickineqp() {
+        $("tr").each(function (index) {
+            $("#view" + index).click(function () {
+                setLoadingOptions("block", "Aguarde buscando informações...");
+                setFormOption("none");
+                setConfFifisOption("none");
+                setMensagensOptions("none", null, null);
+                mountWifiConfs(index);
+            });
+        });
     }
 
+    function mountWifiConfs(i) {
+        eqpselected = eqplist[i];
+        setTimeout(function () {
+            wificonfs = [
+                { user: "User-2.4GHZ", password: "" },
+                { user: "User-5GHZ", password: "" }
+            ];
+            document.getElementById("input_ssid_1").value = wificonfs[0].user;
+            document.getElementById("input_password_1").value = wificonfs[0].password;
+            document.getElementById("input_ssid_2").value = wificonfs[1].user;
+            document.getElementById("input_password_2").value = wificonfs[1].password;
+
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            setConfFifisOption("block");
+        }, 1000);
+    }
+
+    /**
+    * Importar para todos os scripts e Manter o padrão \/
+    * 
+    */
     function setFormOption(show) {
         $("#form").css("display", show);
+    }
+
+    function setConfFifisOption(show) {
+        $("#confwifis").css("display", show);
     }
 
     function setLoadingOptions(show, msg) {
@@ -93,8 +124,8 @@ $(document).ready(function () {
     }
 
     function getSelectedValue(i) {
-        user_pass = {
-            ssid: $("#input_ssid_" + i).val(),
+        wifiselected = {
+            user: $("#input_ssid_" + i).val(),
             password: $("#input_password_" + i).val()
         }
     }
