@@ -2,44 +2,40 @@ $(document).ready(function () {
     // http://10.40.195.81/efika_gps/pages/wificonf/wifichannel.html?instancia=123456789
     // Variaveis do sistema
     var instancia;
-    var _data;
-
-    var channel;
+    var eqplist;
+    var eqpselected;
 
     var channelList;
+    var channelinfo;
+    var selectedchannel;
 
     getInstancia();
 
-    $("#setchannel_0").click(function () {
-        setChannel(0);
-    });
-
     $("#setchannel_1").click(function () {
-        setChannel(1);
+        getSelectedValue(1);
+        setChannel();
     });
 
-    function setChannel(i) {
+    $("#setchannel_2").click(function () {
+        getSelectedValue(2);
+        setChannel();
+    });
+
+    function setChannel() {
         setMensagensOptions("none", null, null);
-        getSelectedValue(i);
-        var ochannel = channelList[i];
-        ochannel.channel = channel;
-        if (ochannel.channel === undefined || ochannel.channel == "") {
+        if (selectedchannel === undefined || selectedchannel == "") {
             setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
         } else {
             setFormOption("none");
             setLoadingOptions("block", "Aguarde...");
             setTimeout(function () {
                 setLoadingOptions("none", null);
-                setMensagensOptions("block", "Troca da rede " + ochannel.ssid + " para o canal " + ochannel.channel + " realizada com sucesso", "msg-success"); // Success msg
+                setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " e " + + "para o canal" + selectedchannel + " realizada com sucesso", "msg-success"); // Success msg
                 setFormOption("block");
             }, 1000);
         }
     }
 
-    /**
-    * Importar para todos os scripts e Manter o padrão \/
-    * 
-    */
     function getInstancia() {
         if (window.location.href) {
             var link = window.location.href;
@@ -49,9 +45,6 @@ $(document).ready(function () {
                 setLoadingOptions("block", "Aguarde...");
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
-                /**
-                * Monta o obj de acordo com o caso de uso... 
-                */
                 mountCommand();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
@@ -60,22 +53,78 @@ $(document).ready(function () {
         }
     }
 
-    function mountCommand() {
-        _data = { "parameter": instancia, "executor": "G0034481", "system": null, "paramType": null, "requestDate": null };
-        setLoadingOptions("none", null);
-        setFormOption("block");
-        getChannelList();
+    function getInstancia() {
+        if (window.location.href) {
+            var link = window.location.href;
+            var split = link.split("=");
+            if (split[1]) {
+                instancia = split[1];
+                setLoadingOptions("block", "Aguarde buscando equipamentos...");
+                setFormOption("none");
+                setMensagensOptions("none", null, null);
+                setChannelOption("none");
+                getListEeqp();
+            } else {
+                setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
+                setFormOption("none");
+            }
+        }
     }
 
-    function getChannelList() {
-        channelList = [{ channel: "1", ssid: "rede2.4Ghz" },
-        { channel: "5", ssid: "rede5Ghz" }];
-        document.getElementById("channel_0").value = channelList[0].channel;
-        document.getElementById("channel_1").value = channelList[1].channel;
+    function getListEeqp() {
+        setTimeout(function () {
+            eqplist = [
+                { serial: "11111", guid: 1 },
+                { serial: "22222", guid: 2 },
+                { serial: "333333", guid: 3 }
+            ];
+            for (var index = 0; index < eqplist.length; index++) {
+                var eqp = eqplist[index];
+                $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+            }
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            mountclickineqp();
+        }, 1000);
     }
 
+    function mountclickineqp() {
+        $("tr").each(function (index) {
+            $("#view" + index).click(function () {
+                setLoadingOptions("block", "Aguarde buscando informações...");
+                setFormOption("none");
+                setChannelOption("none");
+                setMensagensOptions("none", null, null);
+                mountchannelconfs(index);
+            });
+        });
+    }
+
+    function mountchannelconfs(i) {
+        eqpselected = eqplist[i];
+        setTimeout(function () {
+            channelList = [
+                { channel: 5, ssid: "2.4GHZ" },
+                { channel: 3, ssid: "5GHZ" }
+            ];
+            document.getElementById("channel_1").value = channelList[0].channel;
+            document.getElementById("channel_2").value = channelList[1].channel;
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            setChannelOption("block");
+        }, 1000);
+    }
+
+    /**
+    * Importar para todos os scripts e Manter o padrão \/
+    * 
+    */
     function setFormOption(show) {
         $("#form").css("display", show);
+    }
+
+    function setChannelOption(show) {
+        $("#channelconfs").css("display", show);
     }
 
     function setLoadingOptions(show, msg) {
@@ -91,6 +140,7 @@ $(document).ready(function () {
     }
 
     function getSelectedValue(i) {
-        channel = $("#channel_" + i).val();
+        channelinfo = channelList[i - 1];
+        selectedchannel = $("#channel_" + i).val();
     }
 });

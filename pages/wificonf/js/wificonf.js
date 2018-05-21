@@ -25,8 +25,6 @@ $(document).ready(function () {
         setLoadingOptions("block", "Aguarde realizando configurações de wifi no modem...");
         setFormOption("none");
         setTimeout(function () {
-            console.log(wifiselected);
-            console.log(eqpselected);
             setLoadingOptions("none", null);
             setConfWifisOption("none");
             setFormOption("block");
