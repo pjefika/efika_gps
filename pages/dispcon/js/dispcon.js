@@ -36,12 +36,14 @@ $(document).ready(function () {
                     {
                         dispositivo: "ABC",
                         status: "ativo",
-                        conected: "Wifi"
+                        conected: "Wifi",
+                        vel_ethernet: "100mbps"
                     },
                     {
                         dispositivo: "BAC",
                         status: "inativo",
-                        conected: "Cabo"
+                        conected: "Cabo",
+                        vel_ethernet: "100mbps"
                     }
                 ]
             },
@@ -53,7 +55,8 @@ $(document).ready(function () {
                     {
                         dispositivo: "ABC",
                         status: "inativo",
-                        conected: "Wifi"
+                        conected: "Wifi",
+                        vel_ethernet: "1gbps"
                     }
                 ]
             },
@@ -64,17 +67,20 @@ $(document).ready(function () {
                     {
                         dispositivo: "ABC",
                         status: "ativo",
-                        conected: "Wifi"
+                        conected: "Wifi",
+                        vel_ethernet: "100mbps"
                     },
                     {
                         dispositivo: "BAC",
                         status: "ativo",
-                        conected: "Cabo"
+                        conected: "Cabo",
+                        vel_ethernet: "1gbps"
                     },
                     {
                         dispositivo: "CAB",
                         status: "inativo",
-                        conected: "Cabo"
+                        conected: "Cabo",
+                        vel_ethernet: "100mbps"
                     }
                 ]
             }
@@ -113,7 +119,7 @@ $(document).ready(function () {
         for (var index = 0; index < disp.length; index++) {
             var dispE = disp[index];
             $("#titledisplist").text(eqplist[i].serial);
-            $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> <td> " + dispE.conected + " </td> </tr>");
+            $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> <td> " + dispE.conected + " </td> <td> " + dispE.vel_ethernet + " </td> </tr>");
         }
     }
 

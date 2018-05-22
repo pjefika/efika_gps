@@ -5,6 +5,8 @@ $(document).ready(function () {
 
     var dnsselected;
 
+    var dnssetted;
+
     getInstancia();
 
     $("#setdnscong").click(function () {
@@ -23,7 +25,7 @@ $(document).ready(function () {
         setTimeout(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
-            setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " com o DNS " + dnsselected + " realizada com sucesso", "msg-success");
+            setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " realizada com sucesso.", "msg-success");
             setConfdnsOption("none");
 
         }, 1000);
@@ -50,9 +52,9 @@ $(document).ready(function () {
     function getListEeqp() {
         setTimeout(function () {
             eqplist = [
-                { serial: "11111", guid: 1 },
-                { serial: "22222", guid: 2 },
-                { serial: "333333", guid: 3 }
+                { serial: "11111", guid: 1, dns: true },
+                { serial: "22222", guid: 2, dns: false },
+                { serial: "333333", guid: 3, dns: true }
             ];
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
@@ -67,6 +69,7 @@ $(document).ready(function () {
     function mountclickineqp() {
         $("tr").each(function (index) {
             $("#view" + index).click(function () {
+                $("#dnstablebody").empty();
                 setLoadingOptions("block", "Aguarde buscando informações...");
                 setFormOption("none");
                 setConfdnsOption("none");
@@ -80,6 +83,19 @@ $(document).ready(function () {
         $("#input_dns").val("");
         eqpselected = eqplist[i];
         setTimeout(function () {
+            dnssetted = {
+                primary: "123.123.123.123",
+                secondary: "321.321.321.321"
+            }
+
+            $("#dnstablebody:last-child").append("<tr> <td> " + dnssetted.primary + " </td> <td> " + dnssetted.secondary + " </td>  </tr>");
+
+            if (eqpselected.dns) {
+                document.getElementById("setdnscong").disabled = true;
+            } else {
+                document.getElementById("setdnscong").disabled = false;
+            }
+
             setLoadingOptions("none", null);
             setFormOption("block");
             setConfdnsOption("block");

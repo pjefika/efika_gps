@@ -24,12 +24,41 @@ $(document).ready(function () {
     function setwificonf() {
         setLoadingOptions("block", "Aguarde realizando configurações de wifi no modem...");
         setFormOption("none");
-        setTimeout(function () {
-            setLoadingOptions("none", null);
-            setConfWifisOption("none");
-            setFormOption("block");
-            setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
-        }, 1000);
+
+
+        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "SET_WIFI" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+                    setLoadingOptions("none", null);
+                    setConfWifisOption("none");
+                    setFormOption("block");
+                } else {
+                    setLoadingOptions("none", null);
+                    setConfWifisOption("none");
+                    setFormOption("block");
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                        setConfWifisOption("none");
+                        setFormOption("block");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
+        // setTimeout(function () {
+        //     setLoadingOptions("none", null);
+        //     setConfWifisOption("none");
+        //     setFormOption("block");
+        //     setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+        // }, 1000);
     }
 
     function getInstancia() {

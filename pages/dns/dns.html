@@ -31,8 +31,19 @@
         <br>
         <div id="confdns">
             <label>IP DNS</label>
-            <input type="text" id="input_dns" placeholder="Insira os DNS's separados por ponto e virgula">
-            <button type="button" id="setdnscong" class="btn btn-blue btn-block">Inserir</button>
+
+            <table id="dnstable">
+                <thead>
+                    <tr>
+                        <th>DNS Primário</th>
+                        <th>DNS Secundário</th>
+                    </tr>
+                </thead>
+                <tbody id="dnstablebody">
+                </tbody>
+            </table>
+
+            <button type="button" id="setdnscong" class="btn btn-blue btn-block">Corrigir DNS</button>
         </div>
     </div>
     <!-- Loading do comando -->
