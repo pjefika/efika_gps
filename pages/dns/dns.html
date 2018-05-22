@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../../css/geral.css" type="text/css">
+
+<link rel="stylesheet" href="../../pages/dns/css/dns.css" type="text/css">
+
+<script src="../../js/jquery-1.10.2.min.js"></script>
+<script src="../../js/geral.js"></script>
+<script src="../../js/json2.js"></script>
+
+<script src="../../pages/dns/js/dns.js"></script>
+
+
+<div class="width-form">
+    <h3>Configurações de DNS</h3>
+    <div id="form">
+        <div>
+            <table id="eqplist">
+                <thead>
+                    <tr>
+                        <th>Equipamento</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="eqpListbody">
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div id="confdns">
+            <label>IP DNS</label>
+            <input type="text" id="input_dns" placeholder="Insira os DNS's separados por ponto e virgula">
+            <button type="button" id="setdnscong" class="btn btn-blue btn-block">Inserir</button>
+        </div>
+    </div>
+    <!-- Loading do comando -->
+    <div id="loading">
+        <div id="loadingMensagem"></div>
+    </div>
+    <!-- Mensagem de retorno -->
+    <div id="mensagem">
+        <p id="textoMensagem"></p>
+    </div>
+    <div id="version" class="version"></div>
+</div>
+
+</html>

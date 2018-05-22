@@ -1,39 +1,32 @@
 $(document).ready(function () {
-    // http://10.40.195.81/efika_gps/pages/wificonf/wifichannel.html?instancia=123456789
-    // Variaveis do sistema
     var instancia;
     var eqplist;
     var eqpselected;
 
-    var channelList;
-    var channelinfo;
-    var selectedchannel;
+    var dnsselected;
 
     getInstancia();
 
-    $("#setchannel_1").click(function () {
-        getSelectedValue(1);
-        setChannel();
+    $("#setdnscong").click(function () {
+        setdns();
     });
 
-    $("#setchannel_2").click(function () {
-        getSelectedValue(2);
-        setChannel();
-    });
-
-    function setChannel() {
+    function setdns() {
+        getinsertedvalue();
+        console.log(eqpselected);
+        console.log(dnsselected);
+        setLoadingOptions("block", "Aguarde realizando configuração...");
+        setFormOption("none");
         setMensagensOptions("none", null, null);
-        if (selectedchannel === undefined || selectedchannel == "") {
-            setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
-        } else {
-            setFormOption("none");
-            setLoadingOptions("block", "Aguarde...");
-            setTimeout(function () {
-                setLoadingOptions("none", null);
-                setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " e " + + "para o canal" + selectedchannel + " realizada com sucesso", "msg-success"); // Success msg
-                setFormOption("block");
-            }, 1000);
-        }
+        setConfdnsOption("none");
+
+        setTimeout(function () {
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " com o DNS " + dnsselected + " realizada com sucesso", "msg-success");
+            setConfdnsOption("none");
+
+        }, 1000);
     }
 
     function getInstancia() {
@@ -45,7 +38,7 @@ $(document).ready(function () {
                 setLoadingOptions("block", "Aguarde buscando equipamentos...");
                 setFormOption("none");
                 setMensagensOptions("none", null, null);
-                setChannelOption("none");
+                setConfdnsOption("none");
                 getListEeqp();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
@@ -76,25 +69,20 @@ $(document).ready(function () {
             $("#view" + index).click(function () {
                 setLoadingOptions("block", "Aguarde buscando informações...");
                 setFormOption("none");
-                setChannelOption("none");
+                setConfdnsOption("none");
                 setMensagensOptions("none", null, null);
-                mountchannelconfs(index);
+                mountdnsconfs(index);
             });
         });
     }
 
-    function mountchannelconfs(i) {
+    function mountdnsconfs(i) {
+        $("#input_dns").val("");
         eqpselected = eqplist[i];
         setTimeout(function () {
-            channelList = [
-                { channel: 5, ssid: "2.4GHZ" },
-                { channel: 3, ssid: "5GHZ" }
-            ];
-            document.getElementById("channel_1").value = channelList[0].channel;
-            document.getElementById("channel_2").value = channelList[1].channel;
             setLoadingOptions("none", null);
             setFormOption("block");
-            setChannelOption("block");
+            setConfdnsOption("block");
         }, 1000);
     }
 
@@ -106,8 +94,8 @@ $(document).ready(function () {
         $("#form").css("display", show);
     }
 
-    function setChannelOption(show) {
-        $("#channelconfs").css("display", show);
+    function setConfdnsOption(show) {
+        $("#confdns").css("display", show);
     }
 
     function setLoadingOptions(show, msg) {
@@ -122,8 +110,8 @@ $(document).ready(function () {
         $("#textoMensagem").text(msg);
     }
 
-    function getSelectedValue(i) {
-        channelinfo = channelList[i - 1];
-        selectedchannel = $("#channel_" + i).val();
+    function getinsertedvalue() {
+        dnsselected = $("#input_dns").val();
     }
+
 });
