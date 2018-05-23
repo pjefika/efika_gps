@@ -31,18 +31,18 @@ $(document).ready(function () {
 
         eqplist = [
             {
-                serial: "11111", guid: 1
+                serial: "11111", guid: 1, active: true
             },
             {
-                serial: "22222", guid: 2
+                serial: "22222", guid: 2, active: false
             },
             {
-                serial: "33333", guid: 3
+                serial: "33333", guid: 3, active: true
             }
         ];
         mounttable();
     }
-    
+
     function mounttable() {
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
@@ -50,11 +50,19 @@ $(document).ready(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
                 $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='reset" + index + "' >Reboot</button> </td> </tr>");
+                disablebuttoneqpoff(index);
             }
             setLoadingOptions("none", null);
             setFormOption("block");
             mountRequest();
         }, 1000);
+    }
+
+    function disablebuttoneqpoff(i) {
+        var eqp = eqplist[i];
+        if (!eqp.active) {
+            document.getElementById("reset" + i).disabled = true;
+        }
     }
 
     function mountRequest() {

@@ -14,14 +14,10 @@ $(document).ready(function () {
     });
 
     function setdns() {
-        getinsertedvalue();
-        console.log(eqpselected);
-        console.log(dnsselected);
         setLoadingOptions("block", "Aguarde realizando configuração...");
         setFormOption("none");
         setMensagensOptions("none", null, null);
         setConfdnsOption("none");
-
         setTimeout(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
@@ -52,18 +48,26 @@ $(document).ready(function () {
     function getListEeqp() {
         setTimeout(function () {
             eqplist = [
-                { serial: "11111", guid: 1, dns: true },
-                { serial: "22222", guid: 2, dns: false },
-                { serial: "333333", guid: 3, dns: true }
+                { serial: "11111", guid: 1, dns: true, active: true },
+                { serial: "22222", guid: 2, dns: false, active: true  },
+                { serial: "333333", guid: 3, dns: true, active: false  }
             ];
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
                 $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+                disablebuttoneqpoff(index)
             }
             setLoadingOptions("none", null);
             setFormOption("block");
             mountclickineqp();
         }, 1000);
+    }
+
+    function disablebuttoneqpoff(i) {
+        var eqp = eqplist[i];
+        if (!eqp.active) {
+            document.getElementById("view" + i).disabled = true;
+        }
     }
 
     function mountclickineqp() {
@@ -124,10 +128,6 @@ $(document).ready(function () {
         $("#mensagem").addClass(type)
         $("#mensagem").css("display", show);
         $("#textoMensagem").text(msg);
-    }
-
-    function getinsertedvalue() {
-        dnsselected = $("#input_dns").val();
     }
 
 });
