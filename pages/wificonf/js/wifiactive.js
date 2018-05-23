@@ -44,6 +44,7 @@ $(document).ready(function () {
     function mountclickineqp() {
         $("tr").each(function (index) {
             $("#view" + index).click(function () {
+                $("#wblistbody").empty();
                 setLoadingOptions("block", "Aguarde buscando informações...");
                 setFormOption("none");
                 setwifiactiveconfOption("none");
@@ -57,6 +58,15 @@ $(document).ready(function () {
         $("#input_dns").val("");
         eqpselected = eqplist[i];
         setTimeout(function () {
+            var wblist = { wifi: false, broadcast: true };
+          
+            $("#wblistbody:last-child").append("<tr> <td> " + wblist.wifi + " </td> <td> " + wblist.broadcast + " </td> </tr>");
+
+            if (wblist.wifi || wblist.broadcast) {
+                document.getElementById("activewb").disabled = false;
+            } else {
+                document.getElementById("activewb").disabled = true;
+            }
             setLoadingOptions("none", null);
             setFormOption("block");
             setwifiactiveconfOption("block");

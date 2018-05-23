@@ -24,9 +24,8 @@ $(document).ready(function () {
     function setwificonf() {
         setLoadingOptions("block", "Aguarde realizando configurações de wifi no modem...");
         setFormOption("none");
-
-
-        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "SET_WIFI" });
+        var ins = instancia.split("?");
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "SET_WIFI" });
         request = new XMLHttpRequest();
         request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
         request.setRequestHeader("Content-Type", "text/plain");
