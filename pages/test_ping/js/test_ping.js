@@ -40,18 +40,26 @@ $(document).ready(function () {
     function getListEeqp() {
         setTimeout(function () {
             eqplist = [
-                { serial: "11111", guid: 1 },
-                { serial: "22222", guid: 2 },
-                { serial: "333333", guid: 3 }
+                { serial: "11111", guid: 1, active: true },
+                { serial: "22222", guid: 2, active: false },
+                { serial: "333333", guid: 3, active: true }
             ];
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
                 $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+                disablebuttoneqpoff(index);
             }
             setLoadingOptions("none", null);
             setFormOption("block");
             mountclickineqp();
         }, 1000);
+    }
+
+    function disablebuttoneqpoff(i) {
+        var eqp = eqplist[i];
+        if (!eqp.active) {
+            document.getElementById("view" + i).disabled = true;
+        }
     }
 
     function mountclickineqp() {
@@ -73,6 +81,7 @@ $(document).ready(function () {
     }
 
     function pingar() {
+        eqpselected;
         getSelectedValue();
         if (input_ping === undefined || input_ping == null || input_ping == "") {
             setMensagensOptions("block", "Por favor preencha o campo.", "msg-error");
@@ -81,18 +90,24 @@ $(document).ready(function () {
             setFormOption("none");
             setMensagensOptions("none", null, null);
             setTimeout(function () {
-                setDoPingOption("block");
-                setTableResultOptions("block");
-                document.getElementById("status").innerHTML = "Complete";
-                document.getElementById("tempo").innerHTML = "34";
-                document.getElementById("qntS").innerHTML = "4";
-                document.getElementById("qntE").innerHTML = "0";
-                document.getElementById("endereco").innerHTML = input_ping;
-                document.getElementById("repeticoes").innerHTML = "4";
-
-                setLoadingOptions("none", null);
-                setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
-                setFormOption("block");
+                if (eqpselected.serial === "333333") {
+                    setDoPingOption("block");
+                    setLoadingOptions("none", null);
+                    setMensagensOptions("block", "Não foi possivel realizar teste de ping, equipamento " + eqpselected.serial + " está inativo.", "msg-error"); // Success msg
+                    setFormOption("block");
+                } else {
+                    setDoPingOption("block");
+                    setTableResultOptions("block");
+                    document.getElementById("status").innerHTML = "Complete";
+                    document.getElementById("tempo").innerHTML = "34";
+                    document.getElementById("qntS").innerHTML = "4";
+                    document.getElementById("qntE").innerHTML = "0";
+                    document.getElementById("endereco").innerHTML = input_ping;
+                    document.getElementById("repeticoes").innerHTML = "4";
+                    setLoadingOptions("none", null);
+                    setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
+                    setFormOption("block");
+                }
             }, 1000);
         }
     }

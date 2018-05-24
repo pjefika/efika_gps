@@ -79,9 +79,19 @@ $(document).ready(function () {
         setLoadingOptions("block", "Aguarde...");
         setMensagensOptions("none", null, null);
         setTimeout(function () {
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setMensagensOptions("block", "Reset no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
+            console.log(eqp.serial);
+
+            if (eqp.serial === "33333") {
+                console.log("eqp inativo.");
+                
+                setLoadingOptions("none", null);
+                setFormOption("block");
+                setMensagensOptions("block", "Não foi possivel realizar o Reset no equipamento " + eqp.serial + " pois está inativo.", "msg-error"); // Success msg
+            } else {
+                setLoadingOptions("none", null);
+                setFormOption("block");
+                setMensagensOptions("block", "Reset no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
+            }
         }, 1500);
     }
 
