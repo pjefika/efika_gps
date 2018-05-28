@@ -58,11 +58,18 @@ $(document).ready(function () {
         $("#input_dns").val("");
         eqpselected = eqplist[i];
         setTimeout(function () {
-            var wblist = { wifi: false, broadcast: true };
-          
-            $("#wblistbody:last-child").append("<tr> <td> " + wblist.wifi + " </td> <td> " + wblist.broadcast + " </td> </tr>");
-
-            if (wblist.wifi || wblist.broadcast) {
+            var validifbtnisdisable;
+            var wblist = [
+                { rede: "2.4GHz", wifi: false, broadcast: true },
+                { rede: "5GHz", wifi: true, broadcast: true }
+            ];
+            for (var index = 0; index < wblist.length; index++) {
+                var wb = wblist[index];
+                wb.wifi = wb.wifi ? 'Ativo' : 'Inativo';
+                wb.broadcast = wb.broadcast ? 'Ativo' : 'Inativo';
+                $("#wblistbody:last-child").append("<tr> <td> " + wb.rede + " </td> <td> " + wb.wifi + " </td> <td> " + wb.broadcast + " </td> </tr>");
+            }
+            if (somedisabled(wblist)) {
                 document.getElementById("activewb").disabled = false;
             } else {
                 document.getElementById("activewb").disabled = true;
@@ -70,6 +77,32 @@ $(document).ready(function () {
             setLoadingOptions("none", null);
             setFormOption("block");
             setwifiactiveconfOption("block");
+        }, 1000);
+    }
+
+    function somedisabled(wblist) {
+        var isanyfalse = false;
+        for (var index = 0; index < wblist.length; index++) {
+            var wb = wblist[index];
+            if (wb.wifi === "Inativo" || wb.broadcast === "Inativo") {
+                isanyfalse = true;
+            }
+        }
+        return isanyfalse;
+    }
+
+    $("#activewb").click(function () {
+        setactivewifibroadcast();
+    });
+
+    function setactivewifibroadcast() {
+        setFormOption("none");
+        setwifiactiveconfOption("none");
+        setLoadingOptions("block", "Aguarde enquanto realizamos as configuração...");
+        setTimeout(function () {
+            setLoadingOptions("none", null);
+            setFormOption("block");
+            setMensagensOptions("block", "Comando realizado com sucesso.", "msg-success");
         }, 1000);
     }
 

@@ -89,26 +89,72 @@ $(document).ready(function () {
             setLoadingOptions("block", "Aguarde...");
             setFormOption("none");
             setMensagensOptions("none", null, null);
-            setTimeout(function () {
-                if (eqpselected.serial === "333333") {
-                    setDoPingOption("block");
-                    setLoadingOptions("none", null);
-                    setMensagensOptions("block", "Não foi possivel realizar teste de ping, equipamento " + eqpselected.serial + " está inativo.", "msg-error"); // Success msg
-                    setFormOption("block");
-                } else {
-                    setDoPingOption("block");
-                    setTableResultOptions("block");
-                    document.getElementById("status").innerHTML = "Complete";
-                    document.getElementById("tempo").innerHTML = "34";
-                    document.getElementById("qntS").innerHTML = "4";
-                    document.getElementById("qntE").innerHTML = "0";
-                    document.getElementById("endereco").innerHTML = input_ping;
-                    document.getElementById("repeticoes").innerHTML = "4";
-                    setLoadingOptions("none", null);
-                    setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
-                    setFormOption("block");
+            var ins = instancia.split("?");
+            var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "PING" });
+            request = new XMLHttpRequest();
+            request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+            request.setRequestHeader("Content-Type", "text/plain");
+            request.send(_data);
+            request.onreadystatechange = function () {
+                if (request.readyState === 4) {
+                    resultado = JSON.parse(request.responseText);
+                    if (request.status === 200) {
+                        if (resultado.valid.resultado) {
+                            setDoPingOption("block");
+                            setTableResultOptions("block");
+                            document.getElementById("status").innerHTML = "Complete";
+                            document.getElementById("tempo").innerHTML = "34";
+                            document.getElementById("qntS").innerHTML = "4";
+                            document.getElementById("qntE").innerHTML = "0";
+                            document.getElementById("endereco").innerHTML = input_ping;
+                            document.getElementById("repeticoes").innerHTML = "4";
+                            setLoadingOptions("none", null);
+                            setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
+                            setFormOption("block");
+                        } else {
+                            setDoPingOption("block");
+                            setLoadingOptions("none", null);
+                            setFormOption("block");
+                            setMensagensOptions("block", "Não foi possivel realizar teste de ping, equipamento " + eqpselected.serial + " está inativo.", "msg-error");
+                        }
+                    } else {
+                        setDoPingOption("block");
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
+                        if (resultado.localizedMessage) {
+                            setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                        } else {
+                            setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                        }
+                    }
                 }
-            }, 1000);
+            }
+
+
+            // setLoadingOptions("block", "Aguarde...");
+            // setFormOption("none");
+            // setMensagensOptions("none", null, null);
+            // setTimeout(function () {
+            //     if (eqpselected.serial === "333333") {
+            //         setDoPingOption("block");
+            //         setLoadingOptions("none", null);
+            //         setFormOption("block");
+            //         setMensagensOptions("block", "Não foi possivel realizar teste de ping, equipamento " + eqpselected.serial + " está inativo.", "msg-error");
+
+            //     } else {
+            //         setDoPingOption("block");
+            //         setTableResultOptions("block");
+            //         document.getElementById("status").innerHTML = "Complete";
+            //         document.getElementById("tempo").innerHTML = "34";
+            //         document.getElementById("qntS").innerHTML = "4";
+            //         document.getElementById("qntE").innerHTML = "0";
+            //         document.getElementById("endereco").innerHTML = input_ping;
+            //         document.getElementById("repeticoes").innerHTML = "4";
+            //         setLoadingOptions("none", null);
+            //         setMensagensOptions("block", "Ping realizado com sucesso.", "msg-success"); // Success msg
+            //         setFormOption("block");
+            //     }
+            // }, 1000);
         }
     }
 

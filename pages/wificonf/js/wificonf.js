@@ -52,12 +52,6 @@ $(document).ready(function () {
                 }
             }
         }
-        // setTimeout(function () {
-        //     setLoadingOptions("none", null);
-        //     setConfWifisOption("none");
-        //     setFormOption("block");
-        //     setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " realizada com sucesso.", "msg-success");
-        // }, 1000);
     }
 
     function getInstancia() {
