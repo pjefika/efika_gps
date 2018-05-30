@@ -27,9 +27,7 @@ $(document).ready(function () {
     }
 
     function mountCommand() {
-
         var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
-
         eqplist = [
             {
                 serial: "11111", guid: 1
@@ -71,11 +69,39 @@ $(document).ready(function () {
         setFormOption("none");
         setLoadingOptions("block", "Aguarde...");
         setMensagensOptions("none", null, null);
-        setTimeout(function () {
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setMensagensOptions("block", "Reset de Fabrica no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
-        }, 1500);
+
+        var ins = instancia.split("?");
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "FACTORY_RESET_DEVICE" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    if (resultado.valid.resultado) {
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
+                        setMensagensOptions("block", "Reset de Fabrica no equipamento " + eqp.serial + " realizado com sucesso.", "msg-success"); // Success msg
+                    } else {
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
+                        setMensagensOptions("block", "Não foi possivel realizar o Reset no equipamento " + eqp.serial + " pois está inativo.", "msg-error");
+                    }
+                } else {
+                    setLoadingOptions("none", null);
+                    setFormOption("block");
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                        setLoadingOptions("none", null);
+                        setFormOption("block");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
     }
 
     /**

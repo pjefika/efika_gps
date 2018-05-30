@@ -18,13 +18,42 @@ $(document).ready(function () {
         setFormOption("none");
         setMensagensOptions("none", null, null);
         setConfdnsOption("none");
-        setTimeout(function () {
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " realizada com sucesso.", "msg-success");
-            setConfdnsOption("none");
-
-        }, 1000);
+        var ins = instancia.split("?");
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "GET_DNS" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    if (resultado.valid.resultado) {
+                        setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+                    } else {
+                        setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+                    }
+                    setConfdnsOption("none");
+                    setLoadingOptions("none", null);
+                    setFormOption("block");
+                } else {
+                    setConfdnsOption("none");
+                    setLoadingOptions("none", null);
+                    setFormOption("block");
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
+        // setTimeout(function () {
+        //     setLoadingOptions("none", null);
+        //     setFormOption("block");
+        //     setMensagensOptions("block", "Configuração no equipamento " + eqpselected.serial + " realizada com sucesso.", "msg-success");
+        //     setConfdnsOption("none");
+        // }, 1000);
     }
 
     function getInstancia() {
@@ -49,8 +78,8 @@ $(document).ready(function () {
         setTimeout(function () {
             eqplist = [
                 { serial: "11111", guid: 1, dns: true, active: true },
-                { serial: "22222", guid: 2, dns: false, active: true  },
-                { serial: "333333", guid: 3, dns: true, active: false  }
+                { serial: "22222", guid: 2, dns: false, active: true },
+                { serial: "333333", guid: 3, dns: true, active: false }
             ];
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
