@@ -53,10 +53,10 @@ $(document).ready(function () {
                 ,
                 dispositivos: [
                     {
-                        dispositivo: "ABC",
-                        status: "inativo",
-                        conected: "Wifi",
-                        vel_ethernet: "1gbps"
+                        dispositivo: "",
+                        status: "",
+                        conected: "",
+                        vel_ethernet: ""
                     }
                 ]
             },
