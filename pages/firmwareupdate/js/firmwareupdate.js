@@ -1,120 +1,184 @@
 $(document).ready(function () {
     // http://10.40.195.81/efika_gps/pages/firmwareupdate/firmwareupdate.html?instancia=123456789
     // Variaveis do sistema
+
+    var link = "http://10.129.166.125:7178/efikaServiceAPI/executar/acaoDetalhada";
+    // var link = "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada";
+
     var instancia;
-
     var eqplist;
+    var eqpselected;
+    var ablemock = true; // Habilitar e desabilitar mock
 
+    // Validar instancia e realizar busca dos equipamentos.
     getInstancia();
 
     function getInstancia() {
+        hideAllTags();
         if (window.location.href) {
             var link = window.location.href;
             var split = link.split("=");
             if (split[1]) {
                 instancia = split[1];
-                setLoadingOptions("block", "Aguarde...");
-                setFormOption("none");
-                setMensagensOptions("none", null, null);
-                setTableResultOptions("none");
-                setBtnUpdateOption("none");
-                mountCommand();
+                setLoadingOptions("block", "Aguarde buscando Equipamentos...");
+                doGetDevice();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
-                setFormOption("none");
             }
         }
     }
 
-    $("#updateall").click(function () {
-        mountCommand();
+    function doGetDevice() {
+        if (ablemock) {
+            getDevicesMock();
+        } else {
+            getDevices();
+        }
+    }
 
-    });
+    function getDevices() {
+        var ins = instancia.split("?");
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "SEEK_DEVICES" });
+        request = new XMLHttpRequest();
+        request.open("POST", link);
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                hideAllTags();
+                if (request.status === 200) {
+                    if (resultado.valid.length > 0) {
+                        eqplist = resultado.valid;
+                        mountTableDevices();
+                    } else {
+                        setMensagensOptions("block", "Não foram encontrados equipamentos ativos", "msg-error");
+                    }
+                } else {
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
+    }
 
-    function mountCommand() {
-        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_LIST_EQP" });
-        eqplist = [
+    function getDevicesMock() {
+        hideAllTags();
+        var eqpmock = [
             {
-                serial: "11111",
-                guid: 1,
-                mandatorio: "1.2.3",
-                atual: "1.2.2"
+                activated: true,
+                deviceGUID: 321,
+                deviceId: {
+                    serialNumber: "AA0123456789"
+                }
             },
             {
-                serial: "22222",
-                guid: 2,
-                mandatorio: "1.2.3",
-                atual: "1.2.2"
-            },
-            {
-                serial: "33333",
-                guid: 3,
-                mandatorio: "1.2.3",
-                atual: "1.2.3"
+                activated: true,
+                deviceGUID: 123,
+                deviceId: {
+                    serialNumber: "AA9876543210"
+                }
             }
         ];
-        mounttable();
+        eqplist = eqpmock;
+        mountTableDevices();
     }
 
-    function mounttable() {
-        setFormOption("none");
-        setLoadingOptions("block", "Aguarde...");
-        $("#eqpListbody").empty();
-        setMensagensOptions("none", null, null);
-        setTimeout(function () {
-            for (var index = 0; index < eqplist.length; index++) {
-                var eqp = eqplist[index];
-                var setupclass;
-                var setupbtnname;
-                var disabled;
-                if (eqp.mandatorio != eqp.atual) {
-                    setupbtnname = "Atualizar";
-                    setupclass = "btn-red";
-                    disabled = false;
-                } else {
-                    setupbtnname = "Atualizado";
-                    setupclass = "btn-gray";
-                    disabled = true;
-                }
-                $("#eqplist > tbody:last-child").append("<tr> <td> " + eqp.serial + " </td>  <td> " + eqp.atual + " </td> <td> " + eqp.mandatorio + " </td> <td> <button class='btn " + setupclass + " btn-margin-bottom' type='buttton' id='update" + index + "' >" + setupbtnname + "</button> </td> </tr>");
-                $("#update" + index).prop("disabled", disabled);
-            }
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            mountRequest();
-        }, 1000);
+    function mountTableDevices() {
+        for (var index = 0; index < eqplist.length; index++) {
+            var eqp = eqplist[index];
+            $("#eqpListbody:last-child").append("<tr> <td> " + eqp.deviceId.serialNumber + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+        }
+        setFormOption("block");
+        mountButtonView();
     }
 
-    function mountRequest() {
+    function mountButtonView() {
         $("tr").each(function (index) {
-            $("#update" + index).click(function () {
-                doRequest(index);
+            $("#view" + index).click(function () {
+                // console.log("clicou: " + index);
+                // Ações especificas de acordo com a função.
+                getFirmwareDevice(index);
             });
         });
     }
 
-    function doRequest(i) {
-        var eqp = eqplist[i];
-        setFormOption("none");
-        setLoadingOptions("block", "Aguarde...");
-        setMensagensOptions("none", null, null);
-        setTimeout(function () {
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setMensagensOptions("block", "Comando enviado para o equipamento " + eqp.serial + " com sucesso, aguarde o modem finalizar a atualização.", "msg-success"); // Success msg
-            hideupdatebtns(i);
-        }, 1500);
-        setBtnUpdateOption("block");
+    // Aqui começa as ações especificas de cada ação.
+
+    function getFirmwareDevice(index) {
+        hideAllTags();
+        setLoadingOptions("block", "Aguarde, buscando informações de Firmware.");
+        var ins = instancia.split("?");
+        var eqp = eqplist[index];
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": eqp.deviceGUID, "execucao": "GET_FIRMWARE" });
+        request = new XMLHttpRequest();
+        request.open("POST", link);
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                hideAllTags();
+                setFormOption("block");
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    if (resultado.valid) {
+                        if (resultado.valid.updated) {
+                            setMensagensOptions("block", "Firmware do modem já está atualizado.", "msg-success");
+                        } else {
+                            eqpselected = eqp;
+                            setUpdateFirmwareOption("block");
+                        }
+                    } else {
+                        setMensagensOptions("block", "Informações de firmware não encontrado.", "msg-error");
+                    }
+                } else {
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
     }
 
-    function hideupdatebtns(i) {
-        $("tr").each(function () {
-            $("#update" + i).prop("disabled", true);
-        });
-    }
+    $("#updatefirmware").click(function () {
+        setFirmwareDevice();
+    });
 
-    function setBtnUpdateOption(show) {
-        $("#updateall").css("display", show)
+    function setFirmwareDevice() {
+        hideAllTags();
+        setLoadingOptions("block", "Aguarde, realizando correção de firmware.");
+        var ins = instancia.split("?");
+        var eqp = eqpselected;
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": eqp.deviceGUID, "execucao": "FIRMWARE_UPDATE" });
+        request = new XMLHttpRequest();
+        request.open("POST", link);
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                hideAllTags();
+                setFormOption("block");
+                resultado = JSON.parse(request.responseText);
+                if (request.status === 200) {
+                    if (resultado.valid.resultado) {
+                        setMensagensOptions("block", "Firmware atualizado com sucesso.", "msg-success");
+                    } else {
+                        setMensagensOptions("block", "Não foi possivel realizar configuração de Firmware.", "msg-error");
+                    }
+                } else {
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -137,11 +201,15 @@ $(document).ready(function () {
         $("#textoMensagem").text(msg);
     }
 
-    function setTableResultOptions(show) {
-        $("#table_result").css("display", show);
+    function setUpdateFirmwareOption(show) {
+        $("#updatefirmware").css("display", show);
     }
 
-    function getSelectedValue() {
-        input_ping = $("#input_ping").val();
+    function hideAllTags() {
+        setFormOption("none");
+        setLoadingOptions("none", null);
+        setMensagensOptions("none", null, null);
+        setUpdateFirmwareOption("none");
     }
+
 });

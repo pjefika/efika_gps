@@ -27,13 +27,14 @@ $(document).ready(function () {
     function getListEeqp() {
         setTimeout(function () {
             eqplist = [
-                { serial: "11111", guid: 1 },
-                { serial: "22222", guid: 2 },
-                { serial: "333333", guid: 3 }
+                { serial: "11111", guid: 1, active: true },
+                { serial: "22222", guid: 2, active: false },
+                { serial: "333333", guid: 3, active: true }
             ];
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
                 $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+                disablebuttoneqpoff(index);
             }
             setLoadingOptions("none", null);
             setFormOption("block");
@@ -54,15 +55,21 @@ $(document).ready(function () {
         });
     }
 
+    function disablebuttoneqpoff(i) {
+        var eqp = eqplist[i];
+        if (instancia === "1135302098") {
+            document.getElementById("view" + i).disabled = true;
+        } else if (!eqp.active) {
+            document.getElementById("view" + i).disabled = true;
+        }
+    }
+
     function mountwificonf(i) {
         $("#input_dns").val("");
         eqpselected = eqplist[i];
         setTimeout(function () {
             var validifbtnisdisable;
-            var wblist = [
-                { rede: "2.4GHz", wifi: false, broadcast: true },
-                { rede: "5GHz", wifi: true, broadcast: true }
-            ];
+            var wblist = mockwblist();
             for (var index = 0; index < wblist.length; index++) {
                 var wb = wblist[index];
                 wb.wifi = wb.wifi ? 'Ativo' : 'Inativo';
@@ -80,6 +87,47 @@ $(document).ready(function () {
         }, 1000);
     }
 
+    function mockwblist() {
+        var wblist;
+        switch (instancia) {
+            case "1156422022":
+                wblist = [
+                    { rede: "2.4GHz", wifi: true, broadcast: true }
+                ];
+                break;
+            case "1148674418":
+                wblist = [
+                    { rede: "2.4GHz", wifi: true, broadcast: true },
+                    { rede: "5GHz", wifi: true, broadcast: true }
+                ];
+                break;
+            case "1136891110":
+                wblist = [
+                    { rede: "2.4GHz", wifi: false, broadcast: false }
+                ];
+                break;
+            case "4132650103":
+                wblist = [
+                    { rede: "2.4GHz", wifi: false, broadcast: false },
+                    { rede: "5GHz", wifi: false, broadcast: false }
+                ];
+                break;
+            // case "1135302098":
+            //     wblist = [
+            //         { rede: "2.4GHz", wifi: false, broadcast: true },
+            //         { rede: "5GHz", wifi: true, broadcast: true }
+            //     ];
+            //     break;
+            default:
+                wblist = [
+                    { rede: "2.4GHz", wifi: true, broadcast: true },
+                    { rede: "5GHz", wifi: true, broadcast: true }
+                ];
+                break;
+        }
+        return wblist;
+    }
+
     function somedisabled(wblist) {
         var isanyfalse = false;
         for (var index = 0; index < wblist.length; index++) {
@@ -88,6 +136,8 @@ $(document).ready(function () {
                 isanyfalse = true;
             }
         }
+        console.log(isanyfalse);
+
         return isanyfalse;
     }
 
@@ -100,9 +150,15 @@ $(document).ready(function () {
         setwifiactiveconfOption("none");
         setLoadingOptions("block", "Aguarde enquanto realizamos as configuração...");
         setTimeout(function () {
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setMensagensOptions("block", "Comando realizado com sucesso.", "msg-success");
+            if (instancia === "1135302098") {
+                setLoadingOptions("none", null);
+                setFormOption("block");
+                setMensagensOptions("block", "Modem não está ativo..", "msg-error");
+            } else {
+                setLoadingOptions("none", null);
+                setFormOption("block");
+                setMensagensOptions("block", "Comando realizado com sucesso.", "msg-success");
+            }
         }, 1000);
     }
 

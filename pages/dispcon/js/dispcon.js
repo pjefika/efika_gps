@@ -5,122 +5,81 @@ $(document).ready(function () {
 
     var eqplist;
 
+    // Validar instancia e realizar busca dos equipamentos.
     getInstancia();
 
     function getInstancia() {
+        hideAllTags();
         if (window.location.href) {
             var link = window.location.href;
             var split = link.split("=");
             if (split[1]) {
                 instancia = split[1];
-                setLoadingOptions("block", "Aguarde...");
-                setFormOption("none");
-                setMensagensOptions("none", null, null);
-                setTableResultOptions("none");
-                mountCommand();
+                setLoadingOptions("block", "Aguarde buscando Equipamentos...");
+                getDevices();
             } else {
                 setMensagensOptions("block", "A instância inserida é inválida", "msg-error");
-                setFormOption("none");
             }
         }
     }
 
-    function mountCommand() {
-
-        var _data = JSON.stringify({ "instancia": instancia, "parametro": null, "execucao": "GET_EQP_DISP_CON" });
-        eqplist = [
-            {
-                serial: "11111",
-                guid: 1,
-                dispositivos: [
-                    {
-                        dispositivo: "ABC",
-                        status: "ativo",
-                        conected: "Wifi",
-                        vel_ethernet: "100mbps"
-                    },
-                    {
-                        dispositivo: "BAC",
-                        status: "inativo",
-                        conected: "Cabo",
-                        vel_ethernet: "100mbps"
+    function getDevices() {
+        var ins = instancia.split("?");
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "SEEK_DEVICES" });
+        request = new XMLHttpRequest();
+        request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
+        request.setRequestHeader("Content-Type", "text/plain");
+        request.send(_data);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                resultado = JSON.parse(request.responseText);
+                hideAllTags();
+                if (request.status === 200) {
+                    if (resultado.valid.length > 0) {
+                        eqplist = resultado.valid;
+                        mountTableDevices();
+                    } else {
+                        setMensagensOptions("block", "Não foram encontrados equipamentos ativos", "msg-error");
                     }
-                ]
-            },
-            {
-                serial: "22222",
-                guid: 2
-                ,
-                dispositivos: [
-                    {
-                        dispositivo: "",
-                        status: "",
-                        conected: "",
-                        vel_ethernet: ""
+                } else {
+                    if (resultado.localizedMessage) {
+                        setMensagensOptions("block", resultado.localizedMessage, "msg-error");
+                    } else {
+                        setMensagensOptions("block", "Erro: " + request.status, "msg-error");
                     }
-                ]
-            },
-            {
-                serial: "33333",
-                guid: 3,
-                dispositivos: [
-                    {
-                        dispositivo: "ABC",
-                        status: "ativo",
-                        conected: "Wifi",
-                        vel_ethernet: "100mbps"
-                    },
-                    {
-                        dispositivo: "BAC",
-                        status: "ativo",
-                        conected: "Cabo",
-                        vel_ethernet: "1gbps"
-                    },
-                    {
-                        dispositivo: "CAB",
-                        status: "inativo",
-                        conected: "Cabo",
-                        vel_ethernet: "100mbps"
-                    }
-                ]
+                }
             }
-        ];
-        mounttable();
+        }
     }
 
-    function mounttable() {
-        setFormOption("none");
-        setLoadingOptions("block", "Aguarde...");
-        setTimeout(function () {
-            for (var index = 0; index < eqplist.length; index++) {
-                var eqp = eqplist[index];
-                $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
-            }
-            setLoadingOptions("none", null);
-            setFormOption("block");
-            setEqpListOption("block");
-            setDispListOption("none");
-            mountRequest();
-        }, 1000);
+    function mountTableDevices() {
+        for (var index = 0; index < eqplist.length; index++) {
+            var eqp = eqplist[index];
+            $("#eqpListbody:last-child").append("<tr> <td> " + eqp.deviceId.serialNumber + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
+        }
+        setFormOption("block");
+        mountButtonView();
     }
 
-    function mountRequest() {
+    function mountButtonView() {
         $("tr").each(function (index) {
             $("#view" + index).click(function () {
+                // console.log("clicou: " + index);
+                // Ações especificas de acordo com a função.
                 $("#dispListbody").empty();
                 mountTableListDisp(index);
             });
         });
     }
 
-    function mountTableListDisp(i) {
-        var disp = eqplist[i].dispositivos;
-        setDispListOption("block");
-        for (var index = 0; index < disp.length; index++) {
-            var dispE = disp[index];
-            $("#titledisplist").text(eqplist[i].serial);
-            $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> <td> " + dispE.conected + " </td> <td> " + dispE.vel_ethernet + " </td> </tr>");
-        }
+    function mountTableListDisp(index) {
+        var eqpdisp = eqplist[i].dispositivos;
+        // setDispListOption("block");
+        // for (var index = 0; index < disp.length; index++) {
+        //     var dispE = disp[index];
+        //     $("#titledisplist").text(eqplist[index].serial);
+        //     $("#dispListbody:last-child").append("<tr> <td> " + dispE.dispositivo + " </td> <td> " + dispE.status + " </td> <td> " + dispE.conected + " </td> <td> " + dispE.vel_ethernet + " </td> </tr>");
+        // }
     }
 
     function setEqpListOption(show) {
@@ -151,11 +110,10 @@ $(document).ready(function () {
         $("#textoMensagem").text(msg);
     }
 
-    function setTableResultOptions(show) {
-        $("#table_result").css("display", show);
+    function hideAllTags() {
+        setFormOption("none");
+        setLoadingOptions("none", null);
+        setMensagensOptions("none", null, null);
     }
 
-    function getSelectedValue() {
-        input_ping = $("#input_ping").val();
-    }
 });

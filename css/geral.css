@@ -22,4 +22,4 @@ select { width: 95%; border-radius: 4px; padding-top: 10px; padding-bottom: 10px
 select, option { font-family: Courier, Comic Sans MS, Times, serif; font-size: 20px; }
 input { width: 95%; border-radius: 4px; padding-top: 10px; padding-bottom: 10px; margin-top: 10px; font-family: Courier, Comic Sans MS, Times, serif; font-size: 20px; }
 table { margin: auto; width: 95%; border-collapse: collapse;  margin-top: 10px; }
-table, th, td { border: 1px solid black; }
+table, th, td { border: 1px solid black; text-align: center; }

@@ -84,7 +84,7 @@ $(document).ready(function () {
             for (var index = 0; index < eqplist.length; index++) {
                 var eqp = eqplist[index];
                 $("#eqpListbody:last-child").append("<tr> <td> " + eqp.serial + " </td> <td> <button class='btn btn-blue btn-margin-bottom' type='buttton' id='view" + index + "' >Visualizar</button> </td> </tr>");
-                disablebuttoneqpoff(index)
+                disablebuttoneqpoff(index);
             }
             setLoadingOptions("none", null);
             setFormOption("block");

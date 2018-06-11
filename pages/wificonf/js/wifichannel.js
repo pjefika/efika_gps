@@ -26,13 +26,23 @@ $(document).ready(function () {
         if (selectedchannel === undefined || selectedchannel == "") {
             setMensagensOptions("block", "Por favor preencha todos os campos.", "msg-error");
         } else {
-            setFormOption("none");
-            setLoadingOptions("block", "Aguarde...");
-            setTimeout(function () {
-                setLoadingOptions("none", null);
-                setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " e " + + "para o canal" + selectedchannel + " realizada com sucesso", "msg-success"); // Success msg
-                setFormOption("block");
-            }, 1000);
+            if (eqpselected.serial === "22222") {
+                setFormOption("none");
+                setLoadingOptions("block", "Aguarde...");
+                setTimeout(function () {
+                    setLoadingOptions("none", null);
+                    setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " não foram realizadas.", "msg-error"); // Success msg
+                    setFormOption("block");
+                }, 1000);
+            } else {
+                setFormOption("none");
+                setLoadingOptions("block", "Aguarde...");
+                setTimeout(function () {
+                    setLoadingOptions("none", null);
+                    setMensagensOptions("block", "Configurações no modem " + eqpselected.serial + " para o canal " + selectedchannel + " realizada com sucesso", "msg-success"); // Success msg
+                    setFormOption("block");
+                }, 1000);
+            }
         }
     }
 
@@ -123,7 +133,7 @@ $(document).ready(function () {
     }
 
     function getSelectedValue(i) {
-        channelinfo = channelList[i - 1];
+        channelinfo = channelList[i];
         selectedchannel = $("#channel_" + i).val();
     }
 });
