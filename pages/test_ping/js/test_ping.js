@@ -224,14 +224,4 @@ $(document).ready(function () {
         setDoPingOption("none");
     }
 
-
-
-    function getSelectedValue() {
-        input_ping = $("#input_ping").val();
-    }
-
-    function clearSelectedValue() {
-        $("#input_ping").val("");
-    }
-
 });
