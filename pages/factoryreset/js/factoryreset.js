@@ -111,7 +111,7 @@ $(document).ready(function () {
         setLoadingOptions("block", "Aguarde realizando Reset no modem...");
         var ins = instancia.split("?");
         var eqp = eqplist[i];
-        var _data = JSON.stringify({ "instancia": ins[0], "parametro": null, "execucao": "FACTORY_RESET_DEVICE" });
+        var _data = JSON.stringify({ "instancia": ins[0], "parametro": eqp.deviceGUID, "execucao": "FACTORY_RESET_DEVICE" });
         request = new XMLHttpRequest();
         request.open("POST", "http://10.40.196.171:7178/efikaServiceAPI/executar/acaoDetalhada");
         request.setRequestHeader("Content-Type", "text/plain");
